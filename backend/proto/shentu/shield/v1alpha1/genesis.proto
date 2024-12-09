@@ -1,0 +1,19 @@
+syntax = "proto3";
+package shentu.shield.v1alpha1;
+
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+import "shentu/shield/v1alpha1/shield.proto";
+
+option go_package = "github.com/shentufoundation/shentu/x/shield/types";
+
+// GenesisState defines the shield genesis state.
+message GenesisState {
+    option (gogoproto.equal) = false;
+    option (gogoproto.goproto_getters) = false;
+
+    repeated cosmos.base.v1beta1.DecCoin remaining_service_fees = 1 [ (gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins" ];
+    repeated Provider providers = 2 [ (gogoproto.moretags) = "yaml:\"providers\"", (gogoproto.nullable) = false ];
+}

@@ -1,0 +1,48 @@
+syntax = "proto3";
+package shentu.shield.v1alpha1;
+
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "shentu/shield/v1alpha1/shield.proto";
+import "shentu/shield/v1alpha1/genesis.proto";
+
+option go_package = "github.com/shentufoundation/shentu/x/shield/types";
+
+// Query defines the gRPC querier service for shield module
+service Query {
+  rpc Provider(QueryProviderRequest) returns (QueryProviderResponse) {
+    option (google.api.http).get = "/shentu/shield/v1alpha1/provider/{address}";
+  }
+
+  rpc Providers(QueryProvidersRequest) returns (QueryProvidersResponse) {
+    option (google.api.http).get = "/shentu/shield/v1alpha1/providers";
+  }
+
+  rpc ShieldStatus(QueryShieldStatusRequest) returns (QueryShieldStatusResponse) {
+    option (google.api.http).get = "/shentu/shield/v1alpha1/status";
+  }
+}
+
+message QueryProviderRequest {
+  string address = 1;
+}
+
+message QueryProviderResponse {
+  Provider provider = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryProvidersRequest {
+}
+
+message QueryProvidersResponse {
+  repeated Provider providers = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryShieldStatusRequest {
+}
+
+message QueryShieldStatusResponse {
+  repeated cosmos.base.v1beta1.DecCoin remaining_service_fees = 3 [ (gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins" ];
+}

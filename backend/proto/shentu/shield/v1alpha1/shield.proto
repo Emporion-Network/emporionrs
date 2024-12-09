@@ -1,0 +1,38 @@
+syntax = "proto3";
+package shentu.shield.v1alpha1;
+
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/shentufoundation/shentu/x/shield/types";
+
+// Fees proto wrapper for pool.go methods
+message Fees {
+    option (gogoproto.equal) = false;
+    option (gogoproto.goproto_getters) = false;
+
+    repeated cosmos.base.v1beta1.DecCoin fees = 1 [ (gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins" ];
+}
+
+// Provider tracks total delegation, total collateral, and rewards of a provider.
+message Provider {
+    option (gogoproto.equal) = false;
+    option (gogoproto.goproto_getters) = false;
+
+	// Address is the address of the provider.
+    string address = 1 [ (gogoproto.moretags) = "yaml:\"address\"" ];
+	// DelegationBonded is the amount of bonded delegation.
+    string delegation_bonded = 2 [ (gogoproto.moretags) = "yaml:\"provider\"", (gogoproto.customtype) = "cosmossdk.io/math.Int", (gogoproto.nullable) = false ];
+    // Collateral is amount of all collaterals for the provider, including
+	// those in withdraw queue but excluding those currently locked, in all
+	// pools.
+    string collateral = 3 [ (gogoproto.moretags) = "yaml:\"collateral\"", (gogoproto.customtype) = "cosmossdk.io/math.Int", (gogoproto.nullable) = false ];
+	// TotalLocked is the amount locked for pending claims.
+    string total_locked = 4 [ (gogoproto.moretags) = "yaml:\"total_locked\"", (gogoproto.customtype) = "cosmossdk.io/math.Int", (gogoproto.nullable) = false ];
+	// Withdrawing is the amount of collateral in withdraw queues.
+    string withdrawing = 5 [ (gogoproto.moretags) = "yaml:\"withdrawing\"", (gogoproto.customtype) = "cosmossdk.io/math.Int", (gogoproto.nullable) = false ];
+	// Rewards is the pooling rewards to be collected.
+    repeated cosmos.base.v1beta1.DecCoin rewards = 6 [ (gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins" ];
+}

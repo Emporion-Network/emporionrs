@@ -1,0 +1,2 @@
+GET http://localhost:3000/authed
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhZGRyIjoiY29zbW9zMXIzdXJyMHRuczhtcnMzNGcyMzNzbHN4ZzUyeDl2NGtydjN1OXF5IiwiZXhwIjoxNzMzNDY1MzEyfQ.m3EN90Nu_blsKXtyjww1zZJe9QN_1cD80EYagdEv2CY

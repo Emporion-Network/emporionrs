@@ -1,0 +1,23 @@
+syntax = "proto3";
+package shentu.shield.v1alpha1;
+
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "shentu/shield/v1alpha1/shield.proto";
+
+option go_package = "github.com/shentufoundation/shentu/x/shield/types";
+
+// Msg defines the shield Msg service.
+service Msg {
+    rpc WithdrawRewards(MsgWithdrawRewards) returns (MsgWithdrawRewardsResponse);
+}
+
+// MsgWithdrawForeignRewards defines attribute of withdraw rewards transaction.
+message MsgWithdrawRewards {
+    option (gogoproto.equal) = false;
+    option (gogoproto.goproto_getters) = false;
+  
+    string from = 1 [ (gogoproto.moretags) = "yaml:\"from\"" ];
+}
+  
+message MsgWithdrawRewardsResponse {}
