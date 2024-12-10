@@ -7,11 +7,16 @@ use prost_reflect::{DescriptorPool, DynamicMessage, FieldDescriptor, Kind};
 use protobuf::{descriptor::FileDescriptorSet, SpecialFields};
 use protobuf_parse::Parser;
 use secp256k1::hashes::hex::DisplayHex;
+use secp256k1::hashes::hex::FromHex;
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Number, Value};
 use tokio_tungstenite::{connect_async, tungstenite::Message};
 
-use super::notification::{Notification, Notifier};
+use super::{
+    msgs::{ibc_recieve::IbcRecieve, ibc_transfer::IbcTransfer, msg_send::MessageSend},
+    notification::{Notification, Notifier},
+};
+use crate::structs::notification::Data::BlockchainNotification as NotificationData;
 
 pub struct Blockchain {
     rpc: String,
@@ -52,17 +57,39 @@ fn init_descriptor_pool() -> DescriptorPool {
 fn to_json(fd: FieldDescriptor, v: &prost_reflect::Value) -> Value {
     match fd.kind() {
         Kind::Double => Value::Number(Number::from_f64(v.as_f64().unwrap_or_default()).unwrap()),
-        Kind::Float => Value::Number(Number::from_f64(v.as_f32().unwrap_or_default().into()).unwrap()),
-        Kind::Int32 => Value::Number(Number::from_i128(v.as_i32().unwrap_or_default().into()).unwrap()),
-        Kind::Int64 => Value::Number(Number::from_i128(v.as_i64().unwrap_or_default().into()).unwrap()),
-        Kind::Uint32 => Value::Number(Number::from_i128(v.as_u32().unwrap_or_default().into()).unwrap()),
-        Kind::Uint64 => Value::Number(Number::from_i128(v.as_u64().unwrap_or_default().into()).unwrap()),
-        Kind::Sint32 => Value::Number(Number::from_i128(v.as_i64().unwrap_or_default().into()).unwrap()),
-        Kind::Sint64 => Value::Number(Number::from_i128(v.as_i64().unwrap_or_default().into()).unwrap()),
-        Kind::Fixed32 => Value::Number(Number::from_i128(v.as_i64().unwrap_or_default().into()).unwrap()),
-        Kind::Fixed64 => Value::Number(Number::from_i128(v.as_i64().unwrap_or_default().into()).unwrap()),
-        Kind::Sfixed32 => Value::Number(Number::from_i128(v.as_i64().unwrap_or_default().into()).unwrap()),
-        Kind::Sfixed64 => Value::Number(Number::from_i128(v.as_i64().unwrap_or_default().into()).unwrap()),
+        Kind::Float => {
+            Value::Number(Number::from_f64(v.as_f32().unwrap_or_default().into()).unwrap())
+        }
+        Kind::Int32 => {
+            Value::Number(Number::from_i128(v.as_i32().unwrap_or_default().into()).unwrap())
+        }
+        Kind::Int64 => {
+            Value::Number(Number::from_i128(v.as_i64().unwrap_or_default().into()).unwrap())
+        }
+        Kind::Uint32 => {
+            Value::Number(Number::from_i128(v.as_u32().unwrap_or_default().into()).unwrap())
+        }
+        Kind::Uint64 => {
+            Value::Number(Number::from_i128(v.as_u64().unwrap_or_default().into()).unwrap())
+        }
+        Kind::Sint32 => {
+            Value::Number(Number::from_i128(v.as_i64().unwrap_or_default().into()).unwrap())
+        }
+        Kind::Sint64 => {
+            Value::Number(Number::from_i128(v.as_i64().unwrap_or_default().into()).unwrap())
+        }
+        Kind::Fixed32 => {
+            Value::Number(Number::from_i128(v.as_i64().unwrap_or_default().into()).unwrap())
+        }
+        Kind::Fixed64 => {
+            Value::Number(Number::from_i128(v.as_i64().unwrap_or_default().into()).unwrap())
+        }
+        Kind::Sfixed32 => {
+            Value::Number(Number::from_i128(v.as_i64().unwrap_or_default().into()).unwrap())
+        }
+        Kind::Sfixed64 => {
+            Value::Number(Number::from_i128(v.as_i64().unwrap_or_default().into()).unwrap())
+        }
         Kind::Bool => Value::Bool(v.as_bool().unwrap_or_default()),
         Kind::String => Value::String(v.as_str().unwrap_or_default().to_string()),
         Kind::Bytes => Value::String(v.as_bytes().unwrap().to_lower_hex_string()),
@@ -76,7 +103,7 @@ fn to_json(fd: FieldDescriptor, v: &prost_reflect::Value) -> Value {
                     .to_string(),
             )
         }
-        Kind::Message(_) => panic!(""),
+        Kind::Message(_) => unreachable!(),
     }
 }
 
@@ -138,6 +165,10 @@ fn parse_messages(tx: DynamicMessage) -> Vec<Value> {
         .filter_map(|v| {
             let m = v.as_message()?;
             let msg = parse_message(m.clone());
+
+            // if(msg.get("@type").unwrap().as_str().unwrap() == "ibc.core.channel.v1.MsgRecvPacket"){
+            //     panic!("{}", msg)
+            // }
             Some(msg)
         })
         .collect::<Vec<_>>();
@@ -190,43 +221,29 @@ struct TxMessage {
 impl TryInto<BlockchainNotification> for TxMessage {
     type Error = ();
     fn try_into(self) -> Result<BlockchainNotification, ()> {
-        let data:Data = serde_json::from_value(self.message).map_err(|_| ())?;
+        let data: Data = serde_json::from_value(self.message).map_err(|_| ())?;
         Ok(BlockchainNotification {
-            hash:self.hash,
-            height:self.height,
-            data
+            hash: self.hash,
+            height: self.height,
+            data,
         })
     }
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-
-struct Amount {
-    denom: String,
-    amount: String,
-}
-#[derive(Debug, Serialize, Deserialize, Clone)]
-#[serde(rename_all = "camelCase")]
-pub struct MessageSend {
-    #[serde(rename = "@type")]
-    r#type: String,
-    from_address: String,
-    to_address: String,
-    amount: Vec<Amount>,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(untagged)]
 enum Data {
-    MessageSend(MessageSend)
+    MessageSend(MessageSend),
+    IbcTransfer(IbcTransfer),
+    IbcRecieve(IbcRecieve),
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 
 pub struct BlockchainNotification {
-    hash:String,
-    height:String,
-    data:Data,
+    hash: String,
+    height: String,
+    data: Data,
 }
 
 impl Into<Vec<Notification>> for BlockchainNotification {
@@ -237,14 +254,59 @@ impl Into<Vec<Notification>> for BlockchainNotification {
                     Notification {
                         r#for: Entity::User(message_send.from_address.clone()),
                         from: Entity::Blockchain {},
-                        data: crate::structs::notification::Data::BlockchainNotification(
-                            self.clone(),
-                        ),
+                        data: NotificationData(self.clone()),
                     },
                     Notification {
                         r#for: Entity::User(message_send.to_address.clone()),
                         from: Entity::Blockchain {},
-                        data: crate::structs::notification::Data::BlockchainNotification(self),
+                        data: NotificationData(self),
+                    },
+                ]
+            }
+            Data::IbcTransfer(ibc_transfer) => {
+                vec![
+                    Notification {
+                        r#for: Entity::User(ibc_transfer.sender.clone()),
+                        from: Entity::Blockchain {},
+                        data: NotificationData(self.clone()),
+                    },
+                    Notification {
+                        r#for: Entity::User(ibc_transfer.sender.clone()),
+                        from: Entity::Blockchain {},
+                        data: NotificationData(self),
+                    },
+                ]
+            }
+            Data::IbcRecieve(ibc_recieve) => {
+                let decoded_data = match &ibc_recieve.packet.data {
+                    crate::structs::msgs::ibc_recieve::Data::DecodedData(decoded_data) => {
+                        decoded_data.clone()
+                    }
+                    crate::structs::msgs::ibc_recieve::Data::EncodedData(hex) => {
+                        serde_json::from_slice(&<Vec<u8>>::from_hex(&hex.data).unwrap()).unwrap()
+                    }
+                };
+                let sender = decoded_data.sender.clone();
+                let receiver = decoded_data.receiver.clone();
+                let mut data = ibc_recieve.clone();
+                data.packet.data =
+                    crate::structs::msgs::ibc_recieve::Data::DecodedData(decoded_data);
+                vec![
+                    Notification {
+                        r#for: Entity::User(sender),
+                        from: Entity::Blockchain {},
+                        data: NotificationData(BlockchainNotification {
+                            data: Data::IbcRecieve(data.clone()),
+                            ..self.clone()
+                        }),
+                    },
+                    Notification {
+                        r#for: Entity::User(receiver),
+                        from: Entity::Blockchain {},
+                        data: NotificationData(BlockchainNotification {
+                            data: Data::IbcRecieve(data),
+                            ..self.clone()
+                        }),
                     },
                 ]
             }
@@ -262,10 +324,10 @@ impl Blockchain {
             loop {
                 let m = match ws_stream.next().await {
                     Some(Ok(m)) => m.into_text(),
-                    Some(Err(e)) => {
+                    Some(Err(_)) => {
                         break;
-                    },
-                    _ => continue
+                    }
+                    _ => continue,
                 };
                 if m.is_err() {
                     continue;
@@ -281,7 +343,8 @@ impl Blockchain {
                     .into_iter()
                     .filter_map(|m| m.try_into().ok())
                     .for_each(|m: BlockchainNotification| {
-                        println!("{:?}", m);
+                        let notifications: Vec<_> = m.into();
+                        println!("{:?}", notifications);
                     });
             }
         })

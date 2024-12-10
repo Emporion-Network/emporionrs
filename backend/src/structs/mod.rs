@@ -6,3 +6,4 @@ pub mod jwt;
 pub mod notification;
 pub mod chat_message;
 pub mod blockchain;
+pub mod msgs;
