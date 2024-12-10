@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@cosmjs/json-rpc": "^0.32.4",
+    "@cosmjs/stargate": "^0.32.4",
+    "@cosmwasm/sdk": "^0.8.1",
+    "@iov/cosmoshub": "^2.5.0",
+    "@neutron-org/client-ts": "^1.4.0",
+    "@neutron-org/neutronjs": "^4.2.0",
+    "protobufjs": "^7.4.0"
+  }
+}
