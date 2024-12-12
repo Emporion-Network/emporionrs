@@ -8,7 +8,6 @@ use protobuf::{descriptor::FileDescriptorSet, SpecialFields};
 use protobuf_parse::Parser;
 use secp256k1::hashes::hex::DisplayHex;
 use secp256k1::hashes::hex::FromHex;
-use secp256k1::Secp256k1;
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Number, Value};
 use tokio_tungstenite::{connect_async, tungstenite::Message};
@@ -317,7 +316,7 @@ impl Into<Vec<Notification>> for BlockchainNotification {
 }
 
 impl Blockchain {
-    fn listen(self, notifier: Notifier) -> tokio::task::JoinHandle<()> {
+    pub fn listen(self, notifier: Notifier) -> tokio::task::JoinHandle<()> {
         tokio::spawn(async move {
             let (mut ws_stream, _) = connect_async(self.websoket).await.expect("Failed to connect");
             let msg = Message::text("{\"jsonrpc\": \"2.0\", \"method\": \"subscribe\", \"params\": [\"tm.event='Tx'\"], \"id\": 1 }");
@@ -352,20 +351,23 @@ impl Blockchain {
         })
     }
 
-    fn new(rpc: impl ToString, rest:impl ToString) -> Self {
+    pub fn new(rpc: impl ToString, rest:impl ToString) -> Self {
         Self {
             websoket: rpc.to_string(),
             rest: rest.to_string(),
         }
     }
 
-    async fn query_msg<T>(&self, msg:T) -> Result<T::Output, String>
+    pub async fn query_msg<T>(&self, msg:T) -> Result<T::Output, String>
     where T:Query {
         let p = msg.path(&self.rest);
         let r = reqwest::get(p).await.map_err(|e| e.to_string())?;
         let r = r.json::<Value>().await.map_err(|_| "Err2".to_string())?;
         println!("{}",r);
         serde_json::from_value::<T::Output>(r).map_err(|_| "Err3".to_string())
+    }
+
+    pub async fn exec(){
 
     }
 }

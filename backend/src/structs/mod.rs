@@ -8,3 +8,4 @@ pub mod chat_message;
 pub mod blockchain;
 pub mod msgs;
 pub mod query;
+pub mod exec;
