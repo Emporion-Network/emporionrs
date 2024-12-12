@@ -1,12 +1,13 @@
 use std::time::Duration;
 
 use axum::Router;
-use routes::{auth::AuthParams, chat::handle_chat_messages, nonce::NonceParams, prices::PricesParams, ws::WsParams};
+use routes::{auth::AuthParams, blockchain::handle_blockchain_events, chat::handle_chat_messages, nonce::NonceParams, prices::PricesParams, ws::WsParams};
 use structs::notification::Notifier;
 use tower_http::cors::CorsLayer;
 
 mod routes;
 pub mod structs;
+pub mod utils;
 
 #[derive(Clone)]
 struct Params {
@@ -70,7 +71,9 @@ async fn main() {
     };
 
     handle_chat_messages(&params.notifier);
+    // handle_blockchain_events(&params.notifier);
 
+    
     let app = Router::new()
         .merge(routes::prices::get_prices(&params))
         .merge(routes::nonce::nonce(&params))

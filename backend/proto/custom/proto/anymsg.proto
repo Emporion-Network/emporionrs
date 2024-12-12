@@ -1,0 +1,22 @@
+syntax = "proto3";
+package custom.proto;
+
+
+
+message AnyMessage {
+    string type_url = 1;
+    bytes value = 2;
+}
+
+message TxBody {
+    repeated custom.proto.AnyMessage messages = 1;
+
+   
+    string memo = 2;
+  
+    uint64 timeout_height = 3;
+
+    repeated custom.proto.AnyMessage extension_options = 1023;
+
+    repeated custom.proto.AnyMessage non_critical_extension_options = 2047;
+}

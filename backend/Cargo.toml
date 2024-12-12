@@ -19,4 +19,7 @@ futures = "0.3.31"
 tokio-tungstenite = {version = "0.24.0", features = ["native-tls"]}
 protobuf-parse = "3.7.1"
 protobuf = "3.7.1"
-prost-reflect = "0.14.3"
+prost-reflect = {version = "0.14.3", features = ["serde"]}
+ts-rs = "10.1.0"
+bip39 = "2.1.0"
+hdwallet = "0.4.1"

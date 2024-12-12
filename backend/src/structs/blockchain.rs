@@ -8,10 +8,12 @@ use protobuf::{descriptor::FileDescriptorSet, SpecialFields};
 use protobuf_parse::Parser;
 use secp256k1::hashes::hex::DisplayHex;
 use secp256k1::hashes::hex::FromHex;
+use secp256k1::Secp256k1;
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Number, Value};
 use tokio_tungstenite::{connect_async, tungstenite::Message};
 
+use super::query::Query;
 use super::{
     msgs::{ibc_recieve::IbcRecieve, ibc_transfer::IbcTransfer, msg_send::MessageSend},
     notification::{Notification, Notifier},
@@ -19,10 +21,11 @@ use super::{
 use crate::structs::notification::Data::BlockchainNotification as NotificationData;
 
 pub struct Blockchain {
-    rpc: String,
+    websoket: String,
+    rest: String,
 }
 
-static DESCRIPTOR_POOL: LazyLock<DescriptorPool> = LazyLock::new(init_descriptor_pool);
+pub static DESCRIPTOR_POOL: LazyLock<DescriptorPool> = LazyLock::new(init_descriptor_pool);
 
 fn get_files(path: &str) -> Vec<String> {
     let mut res = Vec::new();
@@ -51,7 +54,8 @@ fn init_descriptor_pool() -> DescriptorPool {
         special_fields: SpecialFields::new(),
     };
     let d = set.write_to_bytes().unwrap();
-    DescriptorPool::decode(d.as_slice()).unwrap()
+    let r = DescriptorPool::decode(d.as_slice()).unwrap();
+    r
 }
 
 fn to_json(fd: FieldDescriptor, v: &prost_reflect::Value) -> Value {
@@ -165,10 +169,6 @@ fn parse_messages(tx: DynamicMessage) -> Vec<Value> {
         .filter_map(|v| {
             let m = v.as_message()?;
             let msg = parse_message(m.clone());
-
-            // if(msg.get("@type").unwrap().as_str().unwrap() == "ibc.core.channel.v1.MsgRecvPacket"){
-            //     panic!("{}", msg)
-            // }
             Some(msg)
         })
         .collect::<Vec<_>>();
@@ -228,6 +228,7 @@ impl TryInto<BlockchainNotification> for TxMessage {
             data,
         })
     }
+
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -245,6 +246,7 @@ pub struct BlockchainNotification {
     height: String,
     data: Data,
 }
+
 
 impl Into<Vec<Notification>> for BlockchainNotification {
     fn into(self) -> Vec<Notification> {
@@ -317,7 +319,7 @@ impl Into<Vec<Notification>> for BlockchainNotification {
 impl Blockchain {
     fn listen(self, notifier: Notifier) -> tokio::task::JoinHandle<()> {
         tokio::spawn(async move {
-            let (mut ws_stream, _) = connect_async(self.rpc).await.expect("Failed to connect");
+            let (mut ws_stream, _) = connect_async(self.websoket).await.expect("Failed to connect");
             let msg = Message::text("{\"jsonrpc\": \"2.0\", \"method\": \"subscribe\", \"params\": [\"tm.event='Tx'\"], \"id\": 1 }");
             let _ = ws_stream.send(msg).await;
 
@@ -350,18 +352,40 @@ impl Blockchain {
         })
     }
 
-    fn new(rpc: &str) -> Self {
+    fn new(rpc: impl ToString, rest:impl ToString) -> Self {
         Self {
-            rpc: rpc.to_owned(),
+            websoket: rpc.to_string(),
+            rest: rest.to_string(),
         }
+    }
+
+    async fn query_msg<T>(&self, msg:T) -> Result<T::Output, String>
+    where T:Query {
+        let p = msg.path(&self.rest);
+        let r = reqwest::get(p).await.map_err(|e| e.to_string())?;
+        let r = r.json::<Value>().await.map_err(|_| "Err2".to_string())?;
+        println!("{}",r);
+        serde_json::from_value::<T::Output>(r).map_err(|_| "Err3".to_string())
+
     }
 }
 
+
+
+
 #[tokio::test]
 async fn test() {
-    let x = Blockchain {
-        rpc: "wss://cosmos-rpc.publicnode.com:443/websocket".to_owned(),
-    };
-    let n = Notifier::new();
-    let _ = x.listen(n).await;
+    use crate::structs::query::wasm::{Cw20TokenInfo, QueryWasm};
+    use crate::structs::query::auth::AccountInfo;
+    let x = Blockchain::new(
+        "wss://cosmos-rpc.publicnode.com:443/websocket", 
+        "https://cosmos-rest.publicnode.com/"
+    );
+    let r = x.query_msg(AccountInfo {
+        address:"cosmos15dk5pfsydl5rfx5f45pza95udjsu0y4jel7p6p".to_string()
+    }).await;
+    println!("{:?}", r);
+        
+    // let n = Notifier::new();
+    // let _ = x.listen(n).await;
 }

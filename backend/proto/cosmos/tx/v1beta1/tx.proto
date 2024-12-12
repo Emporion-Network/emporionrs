@@ -8,6 +8,7 @@ import "cosmos/base/v1beta1/coin.proto";
 import "cosmos/tx/signing/v1beta1/signing.proto";
 import "google/protobuf/any.proto";
 import "cosmos_proto/cosmos.proto";
+import "custom/proto/anymsg.proto";
 
 option go_package = "github.com/cosmos/cosmos-sdk/types/tx";
 

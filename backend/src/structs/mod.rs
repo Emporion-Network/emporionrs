@@ -7,3 +7,4 @@ pub mod notification;
 pub mod chat_message;
 pub mod blockchain;
 pub mod msgs;
+pub mod query;
