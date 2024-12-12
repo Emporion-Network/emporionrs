@@ -321,7 +321,7 @@ impl Blockchain {
             let (mut ws_stream, _) = connect_async(self.websoket).await.expect("Failed to connect");
             let msg = Message::text("{\"jsonrpc\": \"2.0\", \"method\": \"subscribe\", \"params\": [\"tm.event='Tx'\"], \"id\": 1 }");
             let _ = ws_stream.send(msg).await;
-
+            let (notifier, _)  = notifier.split();
             loop {
                 let m = match ws_stream.next().await {
                     Some(Ok(m)) => m.into_text(),
@@ -345,7 +345,9 @@ impl Blockchain {
                     .filter_map(|m| m.try_into().ok())
                     .for_each(|m: BlockchainNotification| {
                         let notifications: Vec<_> = m.into();
-                        println!("{:?}", notifications);
+                        notifications.into_iter().for_each(|notification|{
+                            let _ = notifier.send(notification);
+                        });
                     });
             }
         })

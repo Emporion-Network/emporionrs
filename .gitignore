@@ -2,3 +2,4 @@ node_modules
 target
 chains
 *.prod.env
+qdrant_storage

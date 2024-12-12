@@ -9,6 +9,7 @@
     "checkJs": true,
     "isolatedModules": true,
     "moduleDetection": "force",
+    "outDir": "build"
   },
   "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte"],
   "references": []
