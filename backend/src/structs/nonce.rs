@@ -5,15 +5,18 @@ use std::{
 
 use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 use ulid::Ulid;
 
 use crate::structs::error::Error;
 
-#[derive(Deserialize)]
+#[derive(Deserialize, TS)]
+#[ts(export)]
 pub struct NonceReq {
     pub address: String,
 }
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, TS)]
+#[ts(export)]
 pub struct NonceRes {
     nonce:String
 }

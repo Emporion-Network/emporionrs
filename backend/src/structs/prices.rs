@@ -1,6 +1,7 @@
 use std::{collections::HashMap, time::Duration};
 use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 use std::time::Instant;
 use crate::structs::error::Error;
 
@@ -8,18 +9,21 @@ use super::error::map_err;
 
 
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone, TS)]
+#[ts(export)]
 pub struct  Price {
     usd:f64,
     usd_24h_change:f64,
 }
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone, TS)]
+#[ts(export)]
+#[ts(type="Record<string,{usd:number, usd_24h_change:number}>")]
 pub struct Prices {
-    #[serde(skip)]
-    last_update:Option<Instant>,
     #[serde(flatten)]
     map:HashMap<String, Price>,
+    #[serde(skip)]
+    last_update:Option<Instant>,
     #[serde(skip)]
     url:String,
     #[serde(skip)]

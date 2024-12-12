@@ -9,6 +9,7 @@ use axum::{
 use jsonwebtoken::{DecodingKey, EncodingKey, Validation};
 use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
 use crate::structs::error::Error;
 
@@ -41,7 +42,8 @@ impl Token {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, TS)]
+#[ts(export)]
 pub struct TokenResp {
     pub token: String,
 }
