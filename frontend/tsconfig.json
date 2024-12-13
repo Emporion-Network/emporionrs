@@ -8,9 +8,8 @@
     "allowJs": true,
     "checkJs": true,
     "isolatedModules": true,
-    "moduleDetection": "force",
-    "outDir": "build"
+    "moduleDetection": "force"
   },
   "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte"],
-  "references": []
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
