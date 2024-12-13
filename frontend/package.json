@@ -20,6 +20,9 @@
     "vite": "^6.0.1"
   },
   "dependencies": {
-    "i18n-js": "^4.5.0"
+    "@radix-ui/colors": "^3.0.0",
+    "i18n-js": "^4.5.0",
+    "remixicon": "^4.5.0",
+    "sass-embedded": "^1.83.0"
   }
 }

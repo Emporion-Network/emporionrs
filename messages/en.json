@@ -1,7 +1,3 @@
 {
-	"$schema": "https://inlang.com/schema/inlang-message-format",
-	"weak_cuddly_dove_sail": "increment",
-	"sea_actual_cobra_hunt": "other",
-	"weak_teary_penguin_fry": "third",
-	"sleek_topical_tadpole_tap": "last"
+	"$schema": "https://inlang.com/schema/inlang-message-format"
 }

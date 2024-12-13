@@ -1,6 +1,7 @@
 import { mount } from 'svelte'
-import './app.css'
+import 'remixicon/fonts/remixicon.css'
 import App from './App.svelte';
+import './app.scss'
 
 const app = mount(App, {
   target: document.getElementById('app')!,
