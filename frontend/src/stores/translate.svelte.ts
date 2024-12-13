@@ -25,7 +25,7 @@ const update = (newLang: string) => {
     });
 }
 
-export const getT = () => {
+export const getTranslator = () => {
     return {
         get t() {
             return tst;
