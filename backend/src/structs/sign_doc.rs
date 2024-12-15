@@ -5,6 +5,7 @@ use secp256k1::{
     Secp256k1,
 };
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
 use crate::utils::pk_to_addr;
 
@@ -40,19 +41,20 @@ pub struct SignDoc {
     sequence: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, TS)]
 pub struct PubKey {
     r#type: String,
     value: String,
 }
-#[derive(Serialize, Deserialize)]
-pub struct Signature {
+#[derive(Serialize, Deserialize, TS)]
+#[ts(export)]
+pub struct TokenReq {
     pub signature: String,
     pub pub_key: PubKey,
     pub nonce: String,
 }
 
-impl Signature {
+impl TokenReq {
     pub fn verify(&self) -> Result<String, super::error::Error> {
         let nonce = BASE64_STANDARD.encode(&self.nonce);
         let sig = BASE64_STANDARD

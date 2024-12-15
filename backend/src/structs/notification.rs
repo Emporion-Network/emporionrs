@@ -1,9 +1,10 @@
 use serde::{Deserialize, Serialize};
 use tokio::sync::broadcast;
+use ts_rs::TS;
 
 use super::{blockchain::BlockchainNotification, chat_message::ChatMessage};
 
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, TS)]
 #[serde(rename_all="snake_case")]
 pub enum Entity {
     User(String),
@@ -12,7 +13,7 @@ pub enum Entity {
 }
 
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, TS)]
 #[serde(rename_all="snake_case")]
 pub enum Data {
     Message(ChatMessage),
@@ -21,8 +22,9 @@ pub enum Data {
 }
 
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, TS)]
 #[serde(rename_all="snake_case")]
+#[ts(export)]
 pub struct Notification {
     pub r#for: Entity,
     pub from:  Entity,

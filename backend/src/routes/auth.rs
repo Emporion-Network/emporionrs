@@ -20,6 +20,6 @@ pub struct AuthParams {
 pub fn auth(params:&(impl Into<AuthParams> + Clone)) -> Router {
     let params:AuthParams = params.clone().into();
     Router::new()
-        .route("/authed", get(get_nonce))
+        .route("/check", get(get_nonce))
         .layer(from_fn_with_state(params.jwt_secret, jwt_middleware))
 }

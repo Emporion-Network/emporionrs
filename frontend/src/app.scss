@@ -19,6 +19,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
 
 
+:root{
+  --font-1:"Inter";
+  --font-2:"Josefin Sans";
+  --height-2:2.5rem;
+}
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -58,4 +63,8 @@ h1, h2, h3, h4, h5, h6 {
 
 #app {
   isolation: isolate;
+}
+
+h1{
+  font-family: var(--font-2);
 }

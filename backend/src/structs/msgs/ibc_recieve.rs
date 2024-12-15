@@ -1,11 +1,12 @@
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
 use crate::exact_string;
 
 exact_string!(exact_type, "ibc.core.channel.v1.MsgRecvPacket");
 
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, TS)]
 #[serde(rename_all = "camelCase")]
 pub struct DecodedData {
     pub amount:String,
@@ -14,19 +15,19 @@ pub struct DecodedData {
     pub sender:String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, TS)]
 pub struct EncodedData {
     pub data:String
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, TS)]
 #[serde(untagged)]
 pub enum Data {
     DecodedData(DecodedData),
     EncodedData(EncodedData)
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, TS)]
 #[serde(rename_all = "camelCase")]
 pub struct Paket {
     #[serde(flatten)]
@@ -38,7 +39,7 @@ pub struct Paket {
     pub sequence:u64,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, TS)]
 #[serde(rename_all = "camelCase")]
 pub struct IbcRecieve {
     #[serde(rename = "@type")]

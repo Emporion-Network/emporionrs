@@ -4,7 +4,6 @@ use ts_rs::TS;
 
 
 #[derive(Clone, Serialize, Deserialize, Debug, TS)]
-#[ts(export)]
 pub struct ChatMessage {
     pub message:String,
     pub from:String,

@@ -1,8 +1,10 @@
 use axum::{body::to_bytes, response::{IntoResponse, Response}, Json};
 use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, TS)]
+#[ts(export)]
 pub struct Error {
     pub message:String,
     #[serde(skip)]

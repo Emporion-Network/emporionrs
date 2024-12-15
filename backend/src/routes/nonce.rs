@@ -5,7 +5,7 @@ use std::{sync::Arc, time::Duration};
 use tokio::sync::Mutex;
 
 use crate::structs::{
-    error::{map_err, Error}, jwt::{Token, TokenResp}, nonce::{NonceReq, NonceRes, NonceToAddr}, sign_doc::Signature
+    error::{map_err, Error}, jwt::{Token, TokenRes}, nonce::{NonceReq, NonceRes, NonceToAddr}, sign_doc::TokenReq
 };
 
 #[axum::debug_handler]
@@ -20,8 +20,8 @@ async fn get_nonce(
 
 async fn check_nonce(
     State(params): State<Arc<Mutex<NonceState>>>,
-    Json(singature): Json<Signature>,
-) -> Result<Json<TokenResp>, Error> {
+    Json(singature): Json<TokenReq>,
+) -> Result<Json<TokenRes>, Error> {
     let addr = singature.verify()?;
     let mut params = params.lock().await;
     params.nonces.check(&singature.nonce, &addr)?;

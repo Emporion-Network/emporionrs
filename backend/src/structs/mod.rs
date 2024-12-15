@@ -9,3 +9,4 @@ pub mod blockchain;
 pub mod msgs;
 pub mod query;
 pub mod exec;
+pub mod db;

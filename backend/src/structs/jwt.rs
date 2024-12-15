@@ -28,7 +28,7 @@ impl Token {
         Self { addr, exp }
     }
 
-    pub fn into_resp(self, key: &str) -> Result<Json<TokenResp>, Error> {
+    pub fn into_resp(self, key: &str) -> Result<Json<TokenRes>, Error> {
         let token = jsonwebtoken::encode(
             &jsonwebtoken::Header::default(),
             &self,
@@ -38,17 +38,17 @@ impl Token {
             "Could not create token",
             StatusCode::INTERNAL_SERVER_ERROR,
         ))?;
-        Ok(Json(TokenResp { token }))
+        Ok(Json(TokenRes { token }))
     }
 }
 
 #[derive(Serialize, Deserialize, TS)]
 #[ts(export)]
-pub struct TokenResp {
+pub struct TokenRes {
     pub token: String,
 }
 
-impl TokenResp {
+impl TokenRes {
     pub fn try_into_token(&self, jwt_secret:&str) -> Result<Token, Error>{
         jsonwebtoken::decode::<Token>(
             &self.token,

@@ -12,7 +12,7 @@ use futures::{
 };
 
 use crate::structs::{
-    jwt::{Token, TokenResp},
+    jwt::{Token, TokenRes},
     notification::{Data, Entity, Notification, Notifier, Receiver, Sender},
 };
 
@@ -33,7 +33,7 @@ pub async fn handler(State(params): State<WsParams>, ws: WebSocketUpgrade) -> Re
 
 async fn handle_socket(mut socket: WebSocket, params: WsParams) {
     let token: Token = if let Some(Ok(Message::Text(message))) = socket.recv().await {
-        let message = serde_json::from_str::<TokenResp>(&message);
+        let message = serde_json::from_str::<TokenRes>(&message);
         if message.is_err() {
             let _ = socket.close().await;
             return;

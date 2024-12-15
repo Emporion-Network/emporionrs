@@ -20,7 +20,12 @@
     "vite": "^6.0.1"
   },
   "dependencies": {
+    "@chain-registry/client": "^1.53.35",
+    "@cosmjs/cosmwasm-stargate": "^0.32.4",
+    "@cosmjs/stargate": "^0.32.4",
+    "@keplr-wallet/types": "^0.12.162",
     "@radix-ui/colors": "^3.0.0",
+    "chain-registry": "^1.69.61",
     "i18n-js": "^4.5.0",
     "remixicon": "^4.5.0",
     "sass-embedded": "^1.83.0"

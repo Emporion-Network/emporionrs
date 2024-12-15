@@ -11,6 +11,7 @@ use secp256k1::hashes::hex::FromHex;
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Number, Value};
 use tokio_tungstenite::{connect_async, tungstenite::Message};
+use ts_rs::TS;
 
 use super::query::Query;
 use super::{
@@ -230,7 +231,7 @@ impl TryInto<BlockchainNotification> for TxMessage {
 
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, TS)]
 #[serde(untagged)]
 enum Data {
     MessageSend(MessageSend),
@@ -238,7 +239,7 @@ enum Data {
     IbcRecieve(IbcRecieve),
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, TS)]
 
 pub struct BlockchainNotification {
     hash: String,

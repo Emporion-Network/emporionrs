@@ -1,3 +1,7 @@
 {
-	"$schema": "https://inlang.com/schema/inlang-message-format"
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"light_giant_shell_attend": "Transfer",
+	"stale_minor_cuckoo_type": "Source chain",
+	"minor_orange_hawk_honor": "Destination chain",
+	"nice_mushy_ox_vent": "Flip order"
 }

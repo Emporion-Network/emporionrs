@@ -1,0 +1,16 @@
+{
+    "integrated_chains": [
+        "cosmoshub",
+        "osmosis",
+        "juno",
+        "injecive",
+        "axelar",
+        "celestia",
+        "sei",
+        "cronos",
+        "neutron",
+        "dydx",
+        "noble"
+    ],
+    "native_chain":"juno"
+}
