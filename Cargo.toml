@@ -1,0 +1,7 @@
+[workspace]
+
+members = [
+    "contracts/emporion_core",
+    "backend"
+]
+resolver = "2"

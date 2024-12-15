@@ -1,4 +1,7 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
-	"light_giant_shell_attend": "स्थानांतरण"
+	"light_giant_shell_attend": "स्थानांतरण",
+	"stale_minor_cuckoo_type": "स्रोत श्रृंखला",
+	"minor_orange_hawk_honor": "गंतव्य श्रृंखला",
+	"nice_mushy_ox_vent": "फ्लिप ऑर्डर"
 }
