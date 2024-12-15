@@ -3,3 +3,4 @@ target
 chains
 *.prod.env
 qdrant_storage
+.fastembed_cache
