@@ -1,5 +1,5 @@
 [package]
-name = "emporion_core"
+name = "emporion_escrow"
 version = "0.1.0"
 edition = "2021"
 crate-type = ["cdylib", "rlib"]

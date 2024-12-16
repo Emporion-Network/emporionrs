@@ -587,20 +587,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c2459377285ad874054d797f3ccebf984978aa39129f6eafde5cdc8315b612f8"
 
 [[package]]
-name = "contracts"
-version = "0.1.0"
-dependencies = [
- "cosmwasm-schema",
- "cosmwasm-std",
- "cw-asset",
- "cw-multi-test",
- "cw-storage-plus",
- "schemars",
- "serde",
- "thiserror 2.0.7",
-]
-
-[[package]]
 name = "core-foundation"
 version = "0.9.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -879,6 +865,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "cw2"
+version = "2.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b04852cd38f044c0751259d5f78255d07590d136b8a86d4e09efdd7666bd6d27"
+dependencies = [
+ "cosmwasm-schema",
+ "cosmwasm-std",
+ "cw-storage-plus",
+ "schemars",
+ "semver",
+ "serde",
+ "thiserror 1.0.69",
+]
+
+[[package]]
 name = "cw20"
 version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1123,6 +1124,54 @@ dependencies = [
  "sec1",
  "subtle",
  "zeroize",
+]
+
+[[package]]
+name = "emporion_core"
+version = "0.1.0"
+dependencies = [
+ "cosmwasm-schema",
+ "cosmwasm-std",
+ "cw-asset",
+ "cw-multi-test",
+ "cw-storage-plus",
+ "cw2",
+ "cw20",
+ "schemars",
+ "serde",
+ "thiserror 2.0.7",
+]
+
+[[package]]
+name = "emporion_escrow"
+version = "0.1.0"
+dependencies = [
+ "cosmwasm-schema",
+ "cosmwasm-std",
+ "cw-asset",
+ "cw-multi-test",
+ "cw-storage-plus",
+ "cw2",
+ "cw20",
+ "schemars",
+ "serde",
+ "thiserror 2.0.7",
+]
+
+[[package]]
+name = "emporion_oracle"
+version = "0.1.0"
+dependencies = [
+ "cosmwasm-schema",
+ "cosmwasm-std",
+ "cw-asset",
+ "cw-multi-test",
+ "cw-storage-plus",
+ "cw2",
+ "cw20",
+ "schemars",
+ "serde",
+ "thiserror 2.0.7",
 ]
 
 [[package]]
