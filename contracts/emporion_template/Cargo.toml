@@ -1,18 +1,18 @@
 [package]
-name = "emporion_core"
+name = "{{project-name}}"
 version = "0.1.0"
 edition = "2021"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 cosmwasm-schema = "2.1.5"
-cosmwasm-std  = {version ="2.1.5"}
+cosmwasm-std = { version = "2.1.5" }
 cw-asset = "4.0.0"
 cw-storage-plus = "2.0.0"
 cw2 = "2.0.0"
 cw20 = "2.0.0"
 schemars = "0.8.21"
-serde = {version = "1.0.216", features = ["derive"]}
+serde = { version = "1.0.216", features = ["derive"] }
 thiserror = "2.0.7"
 
 [features]

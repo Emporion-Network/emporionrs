@@ -6,7 +6,7 @@ use cw2::set_contract_version;
 use cw_storage_plus::{Item, Map};
 
 use crate::{
-    contract::{CONTRACT_NAME, CONTRACT_VERSION},
+    contract::{ContractResult, CONTRACT_NAME, CONTRACT_VERSION},
     error::ContractError,
     msgs::{Filter, InstantiateMsg, MsgUpdate, PricesResp},
 };
@@ -16,7 +16,6 @@ pub const ADMIN: Item<Addr> = Item::new("admin");
 pub const TIMESTAMP: Item<Timestamp> = Item::new("last_updated_at");
 pub const PROVIDER_NAME: Item<String> = Item::new("provider_name");
 
-pub type ContractResult<T> = Result<T, ContractError>;
 pub struct Price {}
 
 impl Price {

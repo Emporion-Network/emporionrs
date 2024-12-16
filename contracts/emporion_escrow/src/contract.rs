@@ -1,11 +1,11 @@
 use cosmwasm_std::{entry_point, Deps, QueryResponse};
 use cosmwasm_std::{DepsMut, Env, MessageInfo, Response};
-use cw2::set_contract_version;
 
+use crate::error::ContractError;
 use crate::msgs::{ExecuteMsg, InstantiateMsg, QueryMsg};
-use crate::state::{Escrow, NEXT_ID};
-use crate::utils::ContractResult;
+use crate::state::Escrow;
 
+pub type ContractResult<T> = Result<T, ContractError>;
 pub const CONTRACT_NAME: &str = env!("CARGO_PKG_NAME");
 pub const CONTRACT_VERSION: &str = env!("CARGO_PKG_VERSION");
 
@@ -15,17 +15,11 @@ pub const DEFAULT_LIMIT: u32 = 10;
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn instantiate(
     deps: DepsMut,
-    _env: Env,
-    _info: MessageInfo,
-    _msg: InstantiateMsg,
+    env: Env,
+    info: MessageInfo,
+    msg: InstantiateMsg,
 ) -> ContractResult<Response> {
-    set_contract_version(
-        deps.storage,
-        CONTRACT_NAME,
-        CONTRACT_VERSION,
-    )?;
-    NEXT_ID.save(deps.storage, &0)?;
-    Ok(Response::default())
+    Escrow::instantiate(deps, env, info, msg)
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]

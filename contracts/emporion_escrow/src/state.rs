@@ -1,14 +1,15 @@
 use crate::{
-    contract::{DEFAULT_LIMIT, MAX_LIMIT},
+    contract::{ContractResult, CONTRACT_NAME, CONTRACT_VERSION, DEFAULT_LIMIT, MAX_LIMIT},
     error::ContractError,
-    msgs::{EscrowFundCw20, EscrowListFor, EscrowListResp, Pagination},
-    utils::{assert, ContractResult},
+    msgs::{EscrowFundCw20, EscrowListFor, EscrowListResp, InstantiateMsg, Pagination},
+    utils::assert,
 };
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{
     from_json, to_json_binary, Addr, Decimal, Deps, DepsMut, Empty, Env, Fraction, MessageInfo,
     QueryResponse, Response, Timestamp,
 };
+use cw2::set_contract_version;
 use cw20::Cw20ReceiveMsg;
 use cw_asset::{AssetList, AssetListUnchecked, AssetUnchecked};
 use cw_storage_plus::{Bound, Item, Map};
@@ -86,6 +87,17 @@ impl Escrow {
 
     fn get(deps: &Deps, id: u64) -> ContractResult<Self> {
         Ok(ESCROWS.load(deps.storage, id)?)
+    }
+
+    pub fn instantiate(
+        deps: DepsMut,
+        _env: Env,
+        _info: MessageInfo,
+        _msg: InstantiateMsg,
+    ) -> ContractResult<Response> {
+        set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
+        NEXT_ID.save(deps.storage, &0)?;
+        Ok(Response::default())
     }
 
     pub fn exec_create(
@@ -227,7 +239,11 @@ impl Escrow {
         Ok(to_json_binary(&resp)?)
     }
 
-    pub fn query_escrows_for(deps: Deps, _env: Env, msg: EscrowListFor) -> ContractResult<QueryResponse> {
+    pub fn query_escrows_for(
+        deps: Deps,
+        _env: Env,
+        msg: EscrowListFor,
+    ) -> ContractResult<QueryResponse> {
         let addr = deps.api.addr_validate(&msg.addr)?;
         let start = msg.pagination.start_after.map(|v| Bound::exclusive(v));
         let limit = msg.pagination.limit.unwrap_or(DEFAULT_LIMIT).min(MAX_LIMIT) as usize;

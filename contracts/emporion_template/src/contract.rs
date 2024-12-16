@@ -1,13 +1,10 @@
-use cosmwasm_std::{entry_point, Deps, QueryResponse};
+use cosmwasm_std::{entry_point, Deps, Empty, QueryResponse};
 use cosmwasm_std::{DepsMut, Env, MessageInfo, Response};
 
 use crate::error::ContractError;
-use crate::msgs::InstantiateMsg;
-use crate::msgs::{ExecuteMsg, QueryMsg};
-use crate::state::Price;
+use crate::msgs::{ExecuteMsg, InstantiateMsg, QueryMsg};
 
 pub type ContractResult<T> = Result<T, ContractError>;
-
 pub const CONTRACT_NAME: &str = env!("CARGO_PKG_NAME");
 pub const CONTRACT_VERSION: &str = env!("CARGO_PKG_VERSION");
 
@@ -18,7 +15,7 @@ pub fn instantiate(
     info: MessageInfo,
     msg: InstantiateMsg,
 ) -> ContractResult<Response> {
-    Price::instaniate(deps, env, info, msg)
+    todo!()
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]
@@ -28,14 +25,21 @@ pub fn execute(
     info: MessageInfo,
     msg: ExecuteMsg,
 ) -> ContractResult<Response> {
+    use ExecuteMsg::*;
     match msg {
-        ExecuteMsg::Update(msg) => Price::update(deps, env, info, msg),
+        _ => todo!(),
     }
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn query(deps: Deps, env: Env, msg: QueryMsg) -> ContractResult<QueryResponse> {
+    use QueryMsg::*;
     match msg {
-        QueryMsg::Prices(filter) => Price::query_prices(deps, env, filter),
+        _ => todo!(),
     }
+}
+
+#[entry_point]
+pub fn migrate(deps: DepsMut, _env: Env, _msg: Empty) -> ContractResult<Response> {
+    Ok(Response::default())
 }
