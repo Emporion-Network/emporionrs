@@ -3,10 +3,12 @@ use cosmwasm_std::{DepsMut, Env, MessageInfo, Response};
 
 use crate::error::ContractError;
 use crate::msgs::{ExecuteMsg, InstantiateMsg, QueryMsg};
+use crate::state::Review;
 
 pub type ContractResult<T> = Result<T, ContractError>;
 pub const CONTRACT_NAME: &str = env!("CARGO_PKG_NAME");
 pub const CONTRACT_VERSION: &str = env!("CARGO_PKG_VERSION");
+pub const TEXT_MAX_BYTE_SIZE: usize = 4000;
 
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn instantiate(
@@ -15,7 +17,7 @@ pub fn instantiate(
     info: MessageInfo,
     msg: InstantiateMsg,
 ) -> ContractResult<Response> {
-    todo!()
+    Review::instaniate(deps, env, info, msg)
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]
@@ -27,19 +29,17 @@ pub fn execute(
 ) -> ContractResult<Response> {
     use ExecuteMsg::*;
     match msg {
-        _ => todo!(),
+        ReviewCreate(msg) => Review::exec_create(deps, env, info, msg),
+        ReviewUpdate(msg) => Review::exec_update(deps, env, info, msg),
     }
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]
-pub fn query(deps: Deps, env: Env, msg: QueryMsg) -> ContractResult<QueryResponse> {
-    use QueryMsg::*;
-    match msg {
-        _ => todo!(),
-    }
+pub fn query(_deps: Deps, _env: Env, msg: QueryMsg) -> ContractResult<QueryResponse> {
+    match msg {}
 }
 
 #[entry_point]
-pub fn migrate(deps: DepsMut, _env: Env, _msg: Empty) -> ContractResult<Response> {
+pub fn migrate(_deps: DepsMut, _env: Env, _msg: Empty) -> ContractResult<Response> {
     Ok(Response::default())
 }

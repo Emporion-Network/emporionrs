@@ -1127,22 +1127,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "emporion_core"
-version = "0.1.0"
-dependencies = [
- "cosmwasm-schema",
- "cosmwasm-std",
- "cw-asset",
- "cw-multi-test",
- "cw-storage-plus",
- "cw2",
- "cw20",
- "schemars",
- "serde",
- "thiserror 2.0.7",
-]
-
-[[package]]
 name = "emporion_escrow"
 version = "0.1.0"
 dependencies = [
@@ -1160,6 +1144,22 @@ dependencies = [
 
 [[package]]
 name = "emporion_oracle"
+version = "0.1.0"
+dependencies = [
+ "cosmwasm-schema",
+ "cosmwasm-std",
+ "cw-asset",
+ "cw-multi-test",
+ "cw-storage-plus",
+ "cw2",
+ "cw20",
+ "schemars",
+ "serde",
+ "thiserror 2.0.7",
+]
+
+[[package]]
+name = "emporion_reviews"
 version = "0.1.0"
 dependencies = [
  "cosmwasm-schema",

@@ -1,7 +1,5 @@
 [workspace]
 
-members = [
-    "contracts/*",
-    "backend"
-]
+members = ["contracts/*", "backend"]
+exclude = ["contracts/emporion_template"]
 resolver = "2"

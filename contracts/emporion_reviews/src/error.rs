@@ -7,4 +7,8 @@ pub enum ContractError {
     StdError(#[from] StdError),
     #[error("Unauthorized")]
     Unauthorized,
+    #[error("Invalid rating")]
+    InvalidRating,
+    #[error("Invalid message")]
+    InvalidMessage,
 }
