@@ -9,6 +9,8 @@ pub type ContractResult<T> = Result<T, ContractError>;
 pub const CONTRACT_NAME: &str = env!("CARGO_PKG_NAME");
 pub const CONTRACT_VERSION: &str = env!("CARGO_PKG_VERSION");
 pub const TEXT_MAX_BYTE_SIZE: usize = 4000;
+pub const MAX_LIMIT: u32 = 30;
+pub const DEFAULT_LIMIT: u32 = 10;
 
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn instantiate(
@@ -35,8 +37,13 @@ pub fn execute(
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]
-pub fn query(_deps: Deps, _env: Env, msg: QueryMsg) -> ContractResult<QueryResponse> {
-    match msg {}
+pub fn query(deps: Deps, env: Env, msg: QueryMsg) -> ContractResult<QueryResponse> {
+    match msg {
+        QueryMsg::ReviewGet(msg) => Review::query_review(deps, env, msg),
+        QueryMsg::ReviewList(msg) => Review::query_reviews(deps, env, msg),
+        QueryMsg::ReviewByReviewer(msg) => Review::query_reviews_by_reviewer(deps, env, msg),
+        QueryMsg::ReviewsByReviewed(msg) => Review::query_reviews_by_reviewed(deps, env, msg),
+    }
 }
 
 #[entry_point]
