@@ -43,6 +43,10 @@
                 value.add(o);
             }
         }
+        setTimeout(()=>{
+            //@ts-ignore
+            document.activeElement.blur();
+        }, 100)
     };
 </script>
 
@@ -92,6 +96,7 @@
         position: relative;
         outline: none;
         margin-top: 0.5rem;
+        background-color: var(--bg-color, transparent);
 
         &:hover {
             .label {
@@ -212,7 +217,7 @@
                 color: var(--neutral-12);
                 &:hover,
                 &:focus {
-                    background-color: var(--neutral-3);
+                    background-color: var(--neutral-a3);
                 }
             }
         }

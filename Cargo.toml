@@ -1,5 +1,0 @@
-[workspace]
-
-members = ["contracts/*", "backend"]
-exclude = ["contracts/emporion_template"]
-resolver = "2"

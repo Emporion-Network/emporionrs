@@ -58,6 +58,7 @@
         <input class="native" type="text" {placeholder} bind:value />
         {@render children?.()}
     {:else if type == "search"}
+        {@render children?.()}
         <input class="native" type="text" {placeholder} bind:value />
         <button aria-label="clear" onclick={clear}>
             {#if typeof value == "string" && value.length > 0}
@@ -93,6 +94,7 @@
         border-radius: 2px;
         margin-top: 0.5rem;
         padding: 0 0.5rem;
+        padding-top: 0.5rem;
         button {
             background-color: transparent;
             color: var(--neutral-10);
@@ -121,7 +123,7 @@
 
         &:has(:global(.native:placeholder-shown)) {
             div {
-                top: 1.25rem;
+                top: 1.75rem;
                 transform: translateY(-50%);
             }
             &:focus-within {
@@ -173,7 +175,6 @@
 
         textarea {
             height: 7rem !important;
-            padding-top: 0.5rem;
             resize: none;
         }
 

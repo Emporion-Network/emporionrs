@@ -60,7 +60,7 @@ async fn main() {
 
     let params = Params {
         nonce_lifetime: Duration::from_secs(10),
-        jwt_lifetime: Duration::from_secs(10),
+        jwt_lifetime: Duration::from_secs(60 * 24),
         jwt_secret: "".to_string(),
         coin_ids: vec!["neutron-3", "bitcoin", "atom"]
             .iter()

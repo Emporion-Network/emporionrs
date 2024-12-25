@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@cosmjs/cosmwasm-stargate": "^0.32.4",
+    "@cosmjs/stargate": "^0.32.4",
+    "@neutron-org/client-ts": "^1.4.0",
+    "@types/bun": "^1.1.14"
+  }
+}

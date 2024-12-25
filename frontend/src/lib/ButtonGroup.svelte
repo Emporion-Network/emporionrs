@@ -4,7 +4,7 @@
   type T = $$Generic;
   let {
     value = $bindable(),
-    options,
+    options = $bindable(),
     optionRenderer
   }:{
     value:T

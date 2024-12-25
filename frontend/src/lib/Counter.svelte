@@ -1,21 +1,19 @@
 <script lang="ts">
-  import { getLocation } from "../stores/location.svelte";
-  import { getTheme } from "../stores/theme.svelte";
-  let {
-    path
-  }:{
-    path:string,
-  } = $props()
+    import { getLocation } from "../stores/location.svelte";
+    let {
+        path,
+    }: {
+        path: string;
+    } = $props();
 
-  let location = getLocation();
-  let theme = getTheme();
-  const increment = () => {
-    location.goTo(path);
-  };
+    let location = getLocation();
+    const increment = () => {
+        location.goTo(path);
+    };
 </script>
 
 <button onclick={increment}>
-  {path}
+    {path}
 </button>
 
 <style lang="scss"></style>

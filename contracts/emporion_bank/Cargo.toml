@@ -1,0 +1,27 @@
+[package]
+name = "emporion_bank"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+
+[dependencies]
+cosmwasm-schema = "2.1.5"
+cosmwasm-std = { version = "2.1.5", features = ["stargate"] }
+cw-asset = "4.0.0"
+cw-storage-plus = "2.0.0"
+cw2 = "2.0.0"
+cw20 = "2.0.0"
+neutron-std = "5.0.1-rc0"
+schemars = "0.8.21"
+serde = { version = "1.0.216", features = ["derive"] }
+thiserror = "2.0.7"
+protobuf = "3.3.0"
+
+[features]
+library = []
+
+[dev-dependencies]
+cw-multi-test = "2.2.0"

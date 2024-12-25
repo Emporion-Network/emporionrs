@@ -145,6 +145,13 @@ export class API {
         })).map(v => v.nonce);
     }
 
+    async translate(v:{translations:Record<string, string>}){
+        return await this.post<
+        {translations:Record<string, string>},
+        Record<string, string>
+        >("/translate", v);
+    }
+
     async check(){
         return await this.get("/check");
     }

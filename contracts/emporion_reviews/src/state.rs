@@ -62,7 +62,7 @@ enum QueryMsg {
 #[cw_serde]
 pub struct QueryCheckReview {
     pub reviewer: Addr,
-    pub reviewed: Reviewed,
+    pub reviewed: UncheckedReviewed,
 }
 
 #[cw_serde]
@@ -93,15 +93,15 @@ impl UncheckedReview {
             is_valid_str(&self.message, 0, TEXT_MAX_BYTE_SIZE),
             ContractError::InvalidMessage,
         )?;
-        let reviewed = self.reviewed.check(deps.as_ref())?;
         let contract_addr = VALIDATE_REVIEW_CONTRACT.load(deps.storage)?;
         let res: CheckReviewResp = deps.querier.query_wasm_smart(
             contract_addr,
             &QueryMsg::CheckReview(QueryCheckReview {
                 reviewer: info.sender.clone(),
-                reviewed: reviewed.clone(),
+                reviewed: self.reviewed.clone(),
             }),
         )?;
+        let reviewed = self.reviewed.check(deps.as_ref())?;
         assert(res.resp, ContractError::Unauthorized)?;
 
         let id: ContractResult<_> = NEXT_ID.update(deps.storage, |v| Ok(v + 1));
