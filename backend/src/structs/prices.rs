@@ -5,8 +5,6 @@ use ts_rs::TS;
 use std::time::Instant;
 use crate::structs::error::Error;
 
-use super::error::map_err;
-
 
 
 #[derive(Serialize, Deserialize, Clone, TS)]
@@ -51,10 +49,9 @@ impl Prices {
         Instant::now().duration_since(self.last_update.unwrap()) < self.cache_duration{
             return  Ok(());
         }
-        self.map = reqwest::get(&self.url).await
-        .map_err(map_err("could not fetch", StatusCode::SERVICE_UNAVAILABLE))?
+        self.map = reqwest::get(&self.url).await?
         .json::<HashMap<String, Price>>()
-        .await.map_err(map_err("could not fetch", StatusCode::SERVICE_UNAVAILABLE))?;
+        .await?;
         self.last_update = Some(Instant::now());
         Ok(())
     }

@@ -1,7 +1,10 @@
 use std::time::Duration;
 
 use axum::Router;
-use routes::{auth::AuthParams, blockchain::handle_blockchain_events, chat::handle_chat_messages, nonce::NonceParams, prices::PricesParams, ws::WsParams};
+use routes::{
+    auth::AuthParams, blockchain::handle_blockchain_events, chat::handle_chat_messages,
+    nonce::NonceParams, prices::PricesParams, ws::WsParams,
+};
 use structs::notification::Notifier;
 use tower_http::cors::CorsLayer;
 
@@ -15,8 +18,9 @@ struct Params {
     jwt_lifetime: Duration,
     jwt_secret: String,
     coin_ids: Vec<String>,
-    cache_duration: Duration,
-    notifier:Notifier
+    price_cache_duration: Duration,
+    notifier: Notifier,
+    openai_api_key: String,
 }
 
 impl Into<NonceParams> for Params {
@@ -33,6 +37,7 @@ impl Into<AuthParams> for Params {
     fn into(self) -> AuthParams {
         AuthParams {
             jwt_secret: self.jwt_secret,
+            openai_api_key: self.openai_api_key,
         }
     }
 }
@@ -41,7 +46,7 @@ impl Into<PricesParams> for Params {
     fn into(self) -> PricesParams {
         PricesParams {
             coin_ids: self.coin_ids,
-            cache_duration: self.cache_duration,
+            cache_duration: self.price_cache_duration,
         }
     }
 }
@@ -49,7 +54,7 @@ impl Into<PricesParams> for Params {
 impl Into<WsParams> for Params {
     fn into(self) -> WsParams {
         WsParams {
-            notifier:self.notifier,
+            notifier: self.notifier,
             jwt_secret: self.jwt_secret,
         }
     }
@@ -57,23 +62,22 @@ impl Into<WsParams> for Params {
 
 #[tokio::main]
 async fn main() {
-
     let params = Params {
         nonce_lifetime: Duration::from_secs(10),
-        jwt_lifetime: Duration::from_secs(60 * 24),
+        jwt_lifetime: Duration::from_secs(60 * 60 * 24),
         jwt_secret: "".to_string(),
         coin_ids: vec!["neutron-3", "bitcoin", "atom"]
             .iter()
             .map(|e| e.to_string())
             .collect::<Vec<_>>(),
-        cache_duration: Duration::from_secs(60),
-        notifier:Notifier::new(),
+        price_cache_duration: Duration::from_secs(60),
+        notifier: Notifier::new(),
+        openai_api_key: std::env::var("OPENAI_API_KEY").expect("OPENAI_API_KEY not set"),
     };
 
     handle_chat_messages(&params.notifier);
     // handle_blockchain_events(&params.notifier);
 
-    
     let app = Router::new()
         .merge(routes::prices::get_prices(&params))
         .merge(routes::nonce::nonce(&params))

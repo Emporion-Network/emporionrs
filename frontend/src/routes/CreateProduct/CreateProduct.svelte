@@ -11,6 +11,7 @@
     import { api } from "../../stores/user.svelte";
     import Attributes from "./Attributes.svelte";
     import { type Attribute, metas } from "./Attributes/_metas";
+    import AutoTranslate from "./AutoTranslate.svelte";
     const langs = Object.keys(Languages).map((key) => ({
         value: key as SupportedLanguage,
         label: Languages[key as SupportedLanguage],
@@ -60,7 +61,6 @@
             })).unwrap();
             product[key][lang] = res[lang];
         });
-        
     }
 </script>
 
@@ -89,7 +89,7 @@
                     bind:value={product.title[selectedLang.value]}
                 />
                 {#if missingTranslations.title}
-                    <button onclick={translate('title', missingTranslations.title)}>Translate {missingTranslations.title.length} missing translations</button>
+                    <AutoTranslate onclick={translate("title", missingTranslations.title)} missingLanguages={missingTranslations.title}></AutoTranslate>
                 {/if}
             </div>
             <div class="wpr">
@@ -126,7 +126,7 @@
 <style lang="scss">
     .wpr{
         display: flex;
-        :global(*){
+        :global(.input){
             flex: 1;
         }
         button{

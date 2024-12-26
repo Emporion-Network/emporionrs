@@ -4,6 +4,7 @@ import type {NonceRes} from "../../../backend/bindings/NonceRes";
 import type {Prices} from "../../../backend/bindings/Prices";
 import type {TokenRes} from "../../../backend/bindings/TokenRes";
 import type {TokenReq} from "../../../backend/bindings/TokenReq";
+import type {TranslateReq} from "../../../backend/bindings/TranslateReq";
 import type {Error as Err} from "../../../backend/bindings/Error";
 
 import { storage } from "./localStorage";
@@ -24,7 +25,7 @@ class Res<T> {
     }
     static Wrp<T>(v:T):Res<NonNullable<T>>{
         if(v === undefined || v == null) {
-            return Err<NonNullable<T>>({message:"Undefined"})
+            return Err<NonNullable<T>>({error:"Undefined"})
         }
         return Ok<NonNullable<T>>(v);
     }
@@ -56,7 +57,7 @@ class Res<T> {
 
     map_err(f:(v:string)=>string):Res<T>{
         if(this.#v[1] !== null){
-            return Res.Err({message:f(this.#v[1].message)})
+            return Res.Err({error:f(this.#v[1].error)})
         }
         return this as unknown as Res<T>;
     }
@@ -69,14 +70,14 @@ class Res<T> {
             if(res instanceof Promise) {
                 return res.catch(e => {
                     return Err<T>({
-                        message:"message" in e ? String(e.message) : "Unknown error"
+                        error:"error" in e ? String(e.message) : "Unknown error"
                     });
                 })
             }
             return res;
         } catch(e:any){
             return Err<T>({
-                message:"message" in e ? String(e.message) : "Unknown error"
+                error:"error" in e ? String(e.message) : "Unknown error"
             });
         }
     }
@@ -145,11 +146,8 @@ export class API {
         })).map(v => v.nonce);
     }
 
-    async translate(v:{translations:Record<string, string>}){
-        return await this.post<
-        {translations:Record<string, string>},
-        Record<string, string>
-        >("/translate", v);
+    async translate(v:TranslateReq){
+        return await this.post<TranslateReq, Record<string, string>>("/translate", v);
     }
 
     async check(){

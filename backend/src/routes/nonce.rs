@@ -1,11 +1,16 @@
 use axum::{
-    extract::{Json, State}, http::StatusCode, routing::{post, Router}
+    extract::{Json, State},
+    http::StatusCode,
+    routing::{post, Router},
 };
 use std::{sync::Arc, time::Duration};
 use tokio::sync::Mutex;
 
 use crate::structs::{
-    error::{map_err, Error}, jwt::{Token, TokenRes}, nonce::{NonceReq, NonceRes, NonceToAddr}, sign_doc::TokenReq
+    error::Error,
+    jwt::{Token, TokenRes},
+    nonce::{NonceReq, NonceRes, NonceToAddr},
+    sign_doc::TokenReq,
 };
 
 #[axum::debug_handler]
@@ -13,7 +18,7 @@ async fn get_nonce(
     State(params): State<Arc<Mutex<NonceState>>>,
     Json(req): Json<NonceReq>,
 ) -> Result<Json<NonceRes>, Error> {
-    bech32::decode(&req.address).map_err(map_err("Address not valid", StatusCode::BAD_REQUEST))?;
+    bech32::decode(&req.address)?;
     let mut params = params.lock().await;
     params.nonces.add(&req.address).and_then(|t| Ok(Json(t)))
 }
@@ -29,21 +34,21 @@ async fn check_nonce(
 }
 
 pub struct NonceParams {
-    pub jwt_lifetime:Duration,
-    pub jwt_secret:String,
-    pub nonce_lifetime:Duration
+    pub jwt_lifetime: Duration,
+    pub jwt_secret: String,
+    pub nonce_lifetime: Duration,
 }
 
 struct NonceState {
-    jwt_lifetime:Duration,
-    jwt_secret:String,
-    nonces:NonceToAddr,
+    jwt_lifetime: Duration,
+    jwt_secret: String,
+    nonces: NonceToAddr,
 }
 
-pub fn nonce(params:&(impl Into<NonceParams> + Clone)) -> Router {
-    let params:NonceParams = (params.clone()).into();
+pub fn nonce(params: &(impl Into<NonceParams> + Clone)) -> Router {
+    let params: NonceParams = (params.clone()).into();
     let state = Arc::new(Mutex::new(NonceState {
-        nonces:NonceToAddr::new(params.nonce_lifetime),
+        nonces: NonceToAddr::new(params.nonce_lifetime),
         jwt_lifetime: params.jwt_lifetime,
         jwt_secret: params.jwt_secret,
     }));

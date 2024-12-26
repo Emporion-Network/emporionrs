@@ -1,13 +1,10 @@
 use axum::{
-    middleware::from_fn_with_state,
-    routing::{get, post},
-    Extension, Json, Router,
+    extract::State, middleware::from_fn_with_state, routing::{get, post}, Extension, Json, Router
 };
-use reqwest::StatusCode;
 use serde_json::{json, Value};
 
 use crate::structs::{
-    error::{map_err, new_err, Error},
+    error::Error,
     jwt::{jwt_middleware, Token},
     translate::TranslateReq,
 };
@@ -19,6 +16,7 @@ async fn get_nonce(Extension(token): Extension<Token>) -> Result<Json<Token>, Er
 
 async fn translate_messages(
     Extension(_): Extension<Token>,
+    State(auth_params):State<AuthParams>,
     Json(req): Json<TranslateReq>,
 ) -> Result<Json<Value>, Error> {
     let v = json!({
@@ -69,52 +67,44 @@ async fn translate_messages(
         "max_tokens": 1024,
         "top_p": 1,
         "stream": false,
-        "response_format": {
-          "type": "json_object"
-        },
         "stop": null
     });
     let res: Value = reqwest::Client::new()
         .post("https://api.groq.com/openai/v1/chat/completions")
         .header(
             "Authorization",
-            format!("Bearer {}", std::env::var("OPENAI_API_KEY").expect("OPENAI_API_KEY not set")),
+            format!("Bearer {}", auth_params.openai_api_key),
         )
         .json(&v)
         .send()
-        .await
-        .map_err(map_err("", StatusCode::BAD_REQUEST))?
+        .await?
         .json()
-        .await
-        .map_err(map_err("", StatusCode::BAD_REQUEST))?;
-    let res = res
-        .as_object()
-        .ok_or(new_err("Response not an object", StatusCode::BAD_REQUEST))?
-        .get("choices")
-        .ok_or(new_err("Response not an object", StatusCode::BAD_REQUEST))?
-        .as_array()
-        .ok_or(new_err("Response not an object", StatusCode::BAD_REQUEST))?
+        .await?;
+    let res:Option<_> = (||{
+        let res = res.as_object()?
+        .get("choices")?
+        .as_array()?
         .to_vec()
         .into_iter()
-        .nth(0)
-        .ok_or(new_err("Response not an object", StatusCode::BAD_REQUEST))?;
-    let res = res
-        .as_object()
-        .ok_or(new_err("Response not an object", StatusCode::BAD_REQUEST))?
-        .get("message")
-        .ok_or(new_err("Response not an object", StatusCode::BAD_REQUEST))?
-        .as_object()
-        .ok_or(new_err("Response not an object", StatusCode::BAD_REQUEST))?
-        .get("content")
-        .ok_or(new_err("Response not an object", StatusCode::BAD_REQUEST))?
-        .as_str()
-        .ok_or(new_err("Response not an object", StatusCode::BAD_REQUEST))?;
-    let res = serde_json::from_str(res).unwrap();
+        .nth(0)?;
+        let res = res.as_object()?
+        .get("message")?
+        .as_object()?
+        .get("content")?
+        .as_str()?
+        .to_string();
+        Some(res)
+    })();
+    let res = res.ok_or(Error::Default)?;
+    
+    let res = serde_json::from_str(&res).unwrap();
     Ok(Json(res))
 }
 
+#[derive(Clone)]
 pub struct AuthParams {
     pub jwt_secret: String,
+    pub openai_api_key:String,
 }
 
 pub fn auth(params: &(impl Into<AuthParams> + Clone)) -> Router {
@@ -122,5 +112,6 @@ pub fn auth(params: &(impl Into<AuthParams> + Clone)) -> Router {
     Router::new()
         .route("/check", get(get_nonce))
         .route("/translate", post(translate_messages))
-        .layer(from_fn_with_state(params.jwt_secret, jwt_middleware))
+        .layer(from_fn_with_state(params.clone(), jwt_middleware))
+        .with_state(params)
 }

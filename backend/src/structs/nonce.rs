@@ -43,16 +43,12 @@ impl NonceToAddr {
 
     pub fn check(&mut self, nonce: &str, addr: &str) -> Result<(), Error> {
         self.clear();
-        let err = Error {
-            message: "".into(),
-            code: StatusCode::BAD_REQUEST,
-        };
         self.map
             .get(nonce)
-            .ok_or(err.clone())
+            .ok_or(Error::new("Not found"))
             .and_then(|(expected, _)| {
                     if expected != addr {
-                        Err(err)
+                        Err(Error::new("Wrong address"))
                     } else {
                         Ok(())
                     }
@@ -62,10 +58,7 @@ impl NonceToAddr {
     pub fn add(&mut self, addr: &str) -> Result<NonceRes, Error> {
         let now = self.clear();
         if let Some(_) = self.map.values().find(|(other, _)| other == addr) {
-            return Err(Error {
-                message: "Nonce has been sent".into(),
-                code: StatusCode::TOO_MANY_REQUESTS,
-            });
+            return Err(Error::too_many_requests("Nonce has been sent"));
         };
         let nonce = Ulid::new().to_string();
         self.map.insert(nonce.clone(), (addr.to_string(), now));
