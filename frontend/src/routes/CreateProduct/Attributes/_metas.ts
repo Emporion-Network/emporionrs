@@ -9,6 +9,4 @@ export const metas = {
     [selectMeta.type]: selectMeta,
 };
 
-export type Attribute = T<
-ButtonAttribute | CheckboxAttribute | SelectAttribute
->;
+export type Attribute = ButtonAttribute | CheckboxAttribute | SelectAttribute;

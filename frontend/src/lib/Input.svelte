@@ -81,6 +81,7 @@
         <Autocompleter bind:value bind:completions {placeholder} />
     {:else}
         <textarea class="native" bind:value {placeholder}></textarea>
+        {@render children?.()}
     {/if}
 </label>
 
@@ -92,7 +93,7 @@
         border: 1px solid var(--neutral-6);
         transition: all 200ms ease-in-out;
         border-radius: 2px;
-        margin-top: 0.5rem;
+        margin-top: 1rem;
         padding: 0 0.5rem;
         padding-top: 0.5rem;
         button {

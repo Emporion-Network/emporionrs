@@ -2,40 +2,41 @@
     export const type = "buttons" as const;
     export const defaultAttribute = {
         type: type as typeof type,
-        value: "",
-        title: "",
+        value: translatedString(),
+        title: translatedString(),
     };
     export type Attribute = {
         type: typeof type;
-        value: string;
-        title: string;
+        value: T<string>;
+        title: T<string>;
     };
 
     export const meta = {
         type: type,
         defaultAttribute,
-        isDefault: (a: Attribute) => a.value === "" && a.title === "",
-        getTranslatables: (a: Attribute) => [a.title, a.value],
     };
 </script>
 
 <script lang="ts">
-    import Input from "../../../lib/Input.svelte";
-    let { value = $bindable(), title = $bindable() }: Omit<Attribute, "type"> =
-        $props();
+    import TranslatableInput from "../../../lib/TranslatableInput.svelte";
+    import { translatedString, type SupportedLanguage, type T } from '../../../stores/translate.svelte';
+    let { attribute = $bindable(), lang = $bindable() }: {
+        attribute:Attribute,
+        lang:SupportedLanguage,
+    } = $props();
 </script>
 
 <div class="input-attribute">
-    <Input
+    <TranslatableInput
         type="text"
         label="Attribute title"
-        placeholder="Attribute title"
-        bind:value={title}
+        bind:selectedLang={lang}
+        bind:value={attribute.title}
     />
-    <Input
+    <TranslatableInput
         type="text"
         label="Attribute value"
-        placeholder="Attribute value"
-        bind:value
+        bind:selectedLang={lang}
+        bind:value={attribute.value}
     />
 </div>

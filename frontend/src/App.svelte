@@ -6,6 +6,7 @@
     import Chat from "./routes/Chat/Chat.svelte";
     import CreateProduct from "./routes/CreateProduct/CreateProduct.svelte";
     import Store from "./routes/Store/Store.svelte";
+    import Test from "./routes/Test/Test.svelte";
     import { getLocation } from "./stores/location.svelte";
     let location = getLocation();
 </script>
@@ -19,3 +20,4 @@
 <Chat />
 <Bridge />
 <Store />
+<Test/>

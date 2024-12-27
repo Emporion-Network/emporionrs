@@ -9,6 +9,7 @@
     } = $props();
 </script>
 <div class="auto-translate">
+    
     <ToolTip openTimout={200}>
         <i class="ri-error-warning-line" aria-label="Warning some missing translations"></i>
         {#snippet content()}

@@ -111,6 +111,7 @@
         }
 
         &:focus-within {
+            z-index: 2;
             .selected,
             .selected:hover {
                 border: 1px solid var(--main-10);

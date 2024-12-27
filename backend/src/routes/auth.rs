@@ -1,5 +1,8 @@
 use axum::{
-    extract::State, middleware::from_fn_with_state, routing::{get, post}, Extension, Json, Router
+    extract::State,
+    middleware::from_fn_with_state,
+    routing::{get, post},
+    Extension, Json, Router,
 };
 use serde_json::{json, Value};
 
@@ -16,7 +19,7 @@ async fn get_nonce(Extension(token): Extension<Token>) -> Result<Json<Token>, Er
 
 async fn translate_messages(
     Extension(_): Extension<Token>,
-    State(auth_params):State<AuthParams>,
+    State(auth_params): State<AuthParams>,
     Json(req): Json<TranslateReq>,
 ) -> Result<Json<Value>, Error> {
     let v = json!({
@@ -62,13 +65,17 @@ async fn translate_messages(
             "content": serde_json::to_string(&req.translations).unwrap()
             }
         ],
-        "model": "gemma2-9b-it",
+        "response_format": {
+            "type": "json_object"
+        },
+        "model": "llama-3.1-70b-versatile",
         "temperature": 1,
         "max_tokens": 1024,
         "top_p": 1,
         "stream": false,
         "stop": null
     });
+
     let res: Value = reqwest::Client::new()
         .post("https://api.groq.com/openai/v1/chat/completions")
         .header(
@@ -80,31 +87,33 @@ async fn translate_messages(
         .await?
         .json()
         .await?;
-    let res:Option<_> = (||{
-        let res = res.as_object()?
-        .get("choices")?
-        .as_array()?
-        .to_vec()
-        .into_iter()
-        .nth(0)?;
-        let res = res.as_object()?
-        .get("message")?
-        .as_object()?
-        .get("content")?
-        .as_str()?
-        .to_string();
+    let res: Option<_> = (|| {
+        let res = res
+            .as_object()?
+            .get("choices")?
+            .as_array()?
+            .to_vec()
+            .into_iter()
+            .nth(0)?;
+        let res = res
+            .as_object()?
+            .get("message")?
+            .as_object()?
+            .get("content")?
+            .as_str()?
+            .to_string();
         Some(res)
     })();
     let res = res.ok_or(Error::Default)?;
-    
-    let res = serde_json::from_str(&res).unwrap();
+
+    let res = serde_json::from_str(&res)?;
     Ok(Json(res))
 }
 
 #[derive(Clone)]
 pub struct AuthParams {
     pub jwt_secret: String,
-    pub openai_api_key:String,
+    pub openai_api_key: String,
 }
 
 pub fn auth(params: &(impl Into<AuthParams> + Clone)) -> Router {

@@ -111,6 +111,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            align-self: stretch;
             button {
                 cursor: grab;
                 background-color: transparent;
@@ -121,6 +122,7 @@
                 justify-content: center;
                 align-items: center;
                 padding: 1rem;
+                outline: none;
                 i {
                     color: var(--neutral-8);
                 }
@@ -130,6 +132,7 @@
             z-index: 1;
             display: flex;
             justify-content: center;
+            align-self: stretch;
             align-items: center;
         }
         .content {

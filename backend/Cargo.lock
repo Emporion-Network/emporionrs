@@ -200,24 +200,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "axum_thiserror"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0868fb225cf8849a294385dc6f09b68ffe72c9e854e486d1a7cca2b93700bd73"
-dependencies = [
- "axum",
- "proc-macro2",
- "quote",
- "syn",
- "thiserror 1.0.69",
-]
-
-[[package]]
 name = "backendrs"
 version = "0.1.0"
 dependencies = [
  "axum",
- "axum_thiserror",
  "base64 0.22.1",
  "bech32",
  "bip39",

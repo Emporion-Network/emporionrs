@@ -2,29 +2,30 @@
     export const type = "select" as const;
     export const defaultAttribute = {
         type: type as typeof type,
-        value: "",
-        title: "",
+        value: translatedString(),
+        title: translatedString(),
     };
     export type Attribute = {
         type: typeof type;
-        value: string;
-        title: string;
+        value: T<string>;
+        title: T<string>;
     };
 
     export const meta = {
         type: type,
         defaultAttribute,
-        isDefault: (a: Attribute) => a.value === "" && a.title === "",
-        getTranslatables: (a: Attribute) => [a.title, a.value],
+        isDefault: (a: any) => a.value === "" && a.title === "",
+        translatableKeys: ["title", "value"],
     };
 
 </script>
 <script lang="ts">
     import Input from "../../../lib/Input.svelte";
-    let {
-        value = $bindable(),
-        title = $bindable(),
-    }: Omit<Attribute, "type"> = $props();
+    import { translatedString, type SupportedLanguage, type T } from "../../../stores/translate.svelte";
+    let { attribute = $bindable(), lang = $bindable() }: {
+        attribute:Attribute,
+        lang:SupportedLanguage,
+    } = $props();
 </script>
 
 <div class="input-attribute">
@@ -32,12 +33,12 @@
         type="text"
         label="Attribute title"
         placeholder="Attribute title"
-        bind:value={title}
+        bind:value={attribute.title[lang]}
     />
     <Input
         type="text"
         label="Option value"
         placeholder="Option value"
-        bind:value
+        bind:value={attribute.value[lang]}
     />
 </div>

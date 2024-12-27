@@ -1,31 +1,32 @@
 <script lang="ts">
     import MultiSelect from "../../lib/MultiSelect.svelte";
     import {
-        type T,
         type SupportedLanguage,
         Languages,
     } from "../../stores/translate.svelte";
     import Buttons from "./Attributes/Buttons.svelte";
     import Checkbox from "./Attributes/Checkbox.svelte";
     import Select from "./Attributes/Select.svelte";
-    import {type Attribute, metas} from "./Attributes/_metas";
+    import { metas, type Attribute } from "./Attributes/_metas";
     import Draggable from "./Draggable.svelte";
     let {
         attributes = $bindable(),
-        selectedLang
+        selectedLang,
     }: {
         selectedLang: SupportedLanguage;
         attributes: Attribute[];
     } = $props();
 
-    let attributeType: Attribute[SupportedLanguage]["type"] = $state("buttons");
+    let attributeType: Attribute["type"] = $state("buttons");
+
+    const map = {
+        [metas.buttons.type]: Buttons,
+        [metas.checkbox.type]: Checkbox,
+        [metas.select.type]: Select,
+    };
 
     const addAttribute = () => {
-        let attribute = Object.keys(Languages).reduce((acc, lang) => {
-            acc[lang as SupportedLanguage] = metas[attributeType].defaultAttribute;
-            return acc;
-        }, {} as Attribute);
-        attributes.push(attribute);
+        attributes.push(metas[attributeType].defaultAttribute);
     };
 
     const removeAttribute = (attribute: Attribute) => () => {
@@ -42,32 +43,16 @@
 </script>
 
 <div class="attributes">
-    {#each attributes as attr (attr)}
-        {@const attribute = attr[selectedLang]}
+    {#each attributes as attr, i (attr)}
+        {@const Component = map[attr.type] as any}
         <Draggable onswap={swap(attr)}>
             {#snippet content()}
-                {#if attribute.type === metas.buttons.type}
-                    <Buttons
-                        bind:title={attribute.title}
-                        bind:value={attribute.value}
-                    ></Buttons>
-                {:else if attribute.type === metas.checkbox.type}
-                    <Checkbox
-                        bind:title={attribute.title}
-                        bind:description={attribute.description}
-                    ></Checkbox>
-                {:else if attribute.type === metas.select.type}
-                    <Select
-                        bind:title={attribute.title}
-                        bind:value={attribute.value}
-                    ></Select>
-                {/if}
+                <h1>{attr.type}</h1>
+                <Component bind:attribute={attributes[i]} lang={selectedLang}
+                ></Component>
             {/snippet}
             {#snippet menu()}
-                <button
-                    onclick={removeAttribute(attr)}
-                    aria-label="Delete"
-                >
+                <button onclick={removeAttribute(attr)} aria-label="Delete">
                     <i class="ri-delete-bin-line"></i>
                 </button>
             {/snippet}
@@ -75,24 +60,39 @@
     {/each}
 </div>
 
-<MultiSelect
-    options={["buttons", "checkbox", "select"]}
-    bind:value={attributeType}
-    multiple={false}
->
-    {#snippet optionRenderer(v)}
-        {v}
-    {/snippet}
-    {#snippet valueRenderer(v)}
-        {v}
-    {/snippet}
-</MultiSelect>
-<button onclick={addAttribute}>Add attribute</button>
+<div class="attribute-selector">
+    <MultiSelect
+        options={["buttons", "checkbox", "select"]}
+        label="Attribute type"
+        placeholder="Attribute type"
+        bind:value={attributeType}
+        multiple={false}
+    >
+        {#snippet optionRenderer(v)}
+            {v}
+        {/snippet}
+        {#snippet valueRenderer(v)}
+            {v}
+        {/snippet}
+    </MultiSelect>
+    <button onclick={addAttribute}>Add attribute</button>
+</div>
 
 <style lang="scss">
     .attributes {
         display: flex;
         flex-direction: column;
         padding: 1rem;
+    }
+    .attribute-selector {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        button{
+            margin-top: 0.5rem;
+        }
+        :global(.multi-select){
+            min-width: 200px;
+        }
     }
 </style>

@@ -61,3 +61,7 @@ export async function getAvgColor(src:string){
 }
 
 export type WithSkeleton<T> = {skeleton:true} | (T & {skeleton?:false});
+
+export const getKeys = Object.keys as <T extends object>(obj: T) => Array<keyof T>;
+
+export const wait = async (ms:number)=>new Promise(resolve => setTimeout(resolve, ms))

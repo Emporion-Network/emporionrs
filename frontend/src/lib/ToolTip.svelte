@@ -79,6 +79,7 @@
             padding: 0.5rem;
             border: 1px solid var(--neutral-6);
             border-radius: 3px;
+            margin-top: 0.5rem;
             &.bottom-left {
                 top: 100%;
                 left: 0%;

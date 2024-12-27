@@ -1,9 +1,12 @@
-@mixin map_color($color, $new_name) {
+@mixin import_color($color){
   @import url("@radix-ui/colors/#{$color}.css");
   @import url("@radix-ui/colors/#{$color}-dark.css");
   @import url("@radix-ui/colors/#{$color}-alpha.css");
   @import url("@radix-ui/colors/#{$color}-dark-alpha.css");
+}
 
+@mixin map_color($color, $new_name) {
+  @include import_color($color);
   :root {
     @for $i from 1 through 12 {
       --#{$new_name}-#{$i}:var(--#{$color}-#{$i});
@@ -14,6 +17,10 @@
 
 @import url("@radix-ui/colors/white-alpha.css");
 @import url("@radix-ui/colors/black-alpha.css");
+
+@include import_color("orange");
+@include import_color("green");
+@include import_color("red");
 
 @include map_color("indigo", "main");
 @include map_color("gray", "neutral");
