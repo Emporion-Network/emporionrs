@@ -9,6 +9,8 @@
     onchange?:(files:File[])=>void
   } = $props();
 
+  let cls = $state("");
+
   let inputEl: HTMLInputElement;
 
   const change: ChangeEventHandler<HTMLInputElement> = (evt) => {
@@ -23,7 +25,11 @@
   };
   const ondragover = (e: Event) => {
     e.preventDefault();
+    cls = "dragover";
   };
+  const ondragend = ()=>{
+    cls = "";
+  }
   const onclick = () => {
     inputEl.click();
   };
@@ -33,9 +39,11 @@
 </script>
 
 <div
-  class="file-uploader"
+  class="file-uploader {cls}"
   {ondrop}
   {ondragover}
+  {ondragend}
+
   {onclick}
   {onkeydown}
   tabindex="0"
@@ -47,17 +55,18 @@
     type="file"
     multiple
     accept="image/*"
+    tabindex="-1"
   />
   {#if children}
     {@render children?.()}
   {:else}
-    <h1>Drag and drop photos here</h1>
+    <h2>Drag and drop photos here</h2>
     <button class="button-secondary">Or Add Photos</button>
   {/if}
 </div>
 
 <style lang="scss">
-  h1 {
+  h2 {
     text-align: center;
   }
   .file-uploader {
@@ -66,15 +75,15 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    border: 1px solid var(--neutral-8);
+    border: 1px solid var(--neutral-6);
     border-radius: 2px;
-    background-color: var(--neutral-2);
     outline: none;
     position: relative;
     user-select: none;
     gap: 1rem;
     margin-top: 0.5rem;
-    &:focus-within {
+
+    &:focus-visible, &.dragover {
       border: 1px solid var(--main-10);
     }
     input {

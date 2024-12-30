@@ -13,21 +13,21 @@
     export const meta = {
         type: type,
         defaultAttribute,
-        translatableKeys: ["title", "description"],
-        isDefault: (a:any) => a.title === "" && a.description === "",
+        label:"ago_top_stingray_pop"
     };
 </script>
 <script lang="ts">
-    import Input from "../../../lib/Input.svelte";
     import TranslatableInput from "../../../lib/TranslatableInput.svelte";
-    import { translatedString, type SupportedLanguage, type T } from "../../../stores/translate.svelte";
+    import { getTranslator, translatedString, type SupportedLanguage, type T } from "../../../stores/translate.svelte";
     let { attribute = $bindable(), lang = $bindable() }: {
         attribute:Attribute,
         lang:SupportedLanguage,
     } = $props();
+
+    let t = getTranslator();
     
 </script>
 <div class="input-attribute">
-    <TranslatableInput type="text" label="Attribute title" bind:selectedLang={lang} bind:value={attribute.title}/>
-    <TranslatableInput type="textarea" label="Description" bind:selectedLang={lang} bind:value={attribute.description}/>
+    <TranslatableInput type="text" label={t.t("gaudy_home_emu_dust")} bind:selectedLang={lang} bind:value={attribute.title}/>
+    <TranslatableInput type="textarea" label={t.t("flat_alive_porpoise_read")} bind:selectedLang={lang} bind:value={attribute.description}/>
 </div>

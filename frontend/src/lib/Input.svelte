@@ -2,6 +2,7 @@
     import type { Snippet } from "svelte";
     import { type FormEventHandler } from "svelte/elements";
     import Autocompleter from "./Autocompleter.svelte";
+    import { data, type DataAttribute } from "./actions.svelte";
 
     let {
         value = $bindable(),
@@ -12,11 +13,13 @@
         children,
         //@ts-ignore
         completions = $bindable(),
+        selector,
     }: {
         label: string;
         placeholder: string;
         error?: boolean;
         children?: Snippet<[]>;
+        selector?:DataAttribute,
     } & (
         | {
               value?: string | number;
@@ -52,7 +55,7 @@
     };
 </script>
 
-<label class="input {type}" class:error>
+<label class="input {type}" class:error use:data={selector}>
     <div>{label}</div>
     {#if type == "text"}
         <input class="native" type="text" {placeholder} bind:value />
@@ -93,7 +96,6 @@
         border: 1px solid var(--neutral-6);
         transition: all 200ms ease-in-out;
         border-radius: 2px;
-        margin-top: 1rem;
         padding: 0 0.5rem;
         padding-top: 0.5rem;
         button {

@@ -1,5 +1,7 @@
 import { defineConfig, PluginOption } from 'vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte';
+import basicSsl from '@vitejs/plugin-basic-ssl'
+
 import fs from "fs";
 import path from "path";
 
@@ -29,5 +31,5 @@ export const langs = ["${langs.join('","')}"] as const;
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [svelte(), plugin()],
+  plugins: [svelte(), plugin(), basicSsl()],
 })

@@ -26,6 +26,7 @@
     "@cosmjs/stargate": "^0.32.4",
     "@keplr-wallet/types": "^0.12.162",
     "@radix-ui/colors": "^3.0.0",
+    "@vitejs/plugin-basic-ssl": "^1.2.0",
     "chain-registry": "^1.69.61",
     "codemirror": "^6.0.1",
     "i18n-js": "^4.5.0",

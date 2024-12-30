@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { Snippet } from "svelte";
     import type { SvelteSet } from "svelte/reactivity";
+    import { data, type DataAttribute } from "./actions.svelte";
 
     type T = $$Generic;
     type K = $$Generic<boolean>;
@@ -15,6 +16,7 @@
         filter = $bindable(),
         label = "",
         placeholder = "",
+        selector,
     }: {
         value: typeof multiple extends true ? NoInfer<SvelteSet<T>> : T;
         optionRenderer: Snippet<[T, boolean]>;
@@ -27,6 +29,7 @@
         multiple: K;
         label?: string;
         placeholder?: string;
+        selector?:DataAttribute;
     } = $props();
 
     const isMultiple = (b: SvelteSet<T> | T): b is SvelteSet<T> => {
@@ -56,6 +59,7 @@
         (!isMultiple(value) && value)}
     tabindex="0"
     role="listbox"
+    use:data={selector}
 >
     <div class="selected">
         {#if (isMultiple(value) && value.size > 0) || (!isMultiple(value) && value)}
@@ -95,7 +99,6 @@
         flex-direction: column;
         position: relative;
         outline: none;
-        margin-top: 0.5rem;
         background-color: var(--bg-color, transparent);
 
         &:hover {

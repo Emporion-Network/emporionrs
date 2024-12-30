@@ -1,6 +1,7 @@
 <script lang="ts">
-    import type { SupportedLanguage, T } from "../stores/translate.svelte";
+    import { getTranslator, TranslatedLanguages, type SupportedLanguage, type T } from "../stores/translate.svelte";
     import { api } from "../stores/user.svelte";
+    import { data, type DataAttribute } from "./actions.svelte";
     import Input from "./Input.svelte";
     import ToolTip from "./ToolTip.svelte";
     import { getKeys } from "./utils";
@@ -10,11 +11,15 @@
         selectedLang = $bindable(),
         type,
         label,
+        selector,
+        buttonSelector
     }: {
         value: T<string>;
         selectedLang: SupportedLanguage;
         type: "textarea" | "text";
         label: string;
+        selector?:DataAttribute,
+        buttonSelector?:DataAttribute,
     } = $props();
 
     let missingTranslations = $derived.by(() => {
@@ -24,6 +29,8 @@
             return value[v] == "";
         });
     });
+
+    let t = getTranslator();
     let percent = $state(1);
 
     const translate = () => {
@@ -64,7 +71,7 @@
     };
 </script>
 
-<div class="translatable-input" style="--percent:{percent}">
+<div class="translatable-input" style="--percent:{percent}" use:data={selector}>
     <Input {type} bind:value={value[selectedLang]} {label} placeholder={label}>
         {#if missingTranslations.length}
             <ToolTip openTimout={200}>
@@ -72,14 +79,15 @@
                     aria-label="Auto translate"
                     class="warn"
                     onclick={translate}
+                    use:data={buttonSelector}
                 >
                     <i class="ri-translate"></i>
                 </button>
                 {#snippet content()}
-                    <p>Auto translate missing translations for:</p>
+                    <p>{t.t("empty_quiet_ladybug_pull")}</p>
                     <ul>
                         {#each missingTranslations as lang}
-                            <li>{lang}</li>
+                            <li>{t.t(TranslatedLanguages[lang])}</li>
                         {/each}
                     </ul>
                 {/snippet}
@@ -90,15 +98,16 @@
                     aria-label="Re translate"
                     class="ok"
                     onclick={retranslate}
+                    use:data={buttonSelector}
                 >
                     <i class="ri-translate"></i>
                 </button>
                 {#snippet content()}
-                    <p>Regenerate translations</p>
+                    <p>{t.t("candid_empty_ladybug_gleam")}</p>
                 {/snippet}
             </ToolTip>
         {:else}
-            <button aria-label="Re translate" disabled>
+            <button aria-label="Re translate" use:data={buttonSelector} disabled>
                 <i class="ri-translate"></i>
             </button>
         {/if}
