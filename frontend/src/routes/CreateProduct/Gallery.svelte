@@ -150,6 +150,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            font-size: 2rem;
             &:hover {
                 background-color: var(--neutral-a3);
                 border: 1px solid var(--neutral-7);

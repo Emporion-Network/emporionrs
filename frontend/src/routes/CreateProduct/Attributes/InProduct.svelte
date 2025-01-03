@@ -21,9 +21,10 @@
 </script>
 
 {#each attributes as attr, i (attr)}
-{@const Component = map[attr.display_type] as any}
-{attributes[i].trait_type}
-<Component bind:attribute={attributes[i]} lang={selectedLang}
-bind:this={registry[`product_attribute_${i}`]}
-></Component>
+    {@const Component = map[attr.display_type] as any}
+    <Component
+        bind:attribute={attributes[i]}
+        lang={selectedLang}
+        bind:this={registry[`product_attribute_${i}`]}
+    />
 {/each}

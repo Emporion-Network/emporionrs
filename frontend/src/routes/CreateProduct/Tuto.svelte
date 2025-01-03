@@ -4,6 +4,8 @@
     import { getTranslator } from "../../stores/translate.svelte";
     import { getTutoRegistry } from "./tutoStore.svelte";
     import { typeStr, wait } from "../../lib/utils";
+    import { TUTORIAL_PRODUCT } from "./tutorialProduct";
+    let tgt = TUTORIAL_PRODUCT[0];
     let {
         ondone,
     }: {
@@ -11,9 +13,9 @@
     } = $props();
     let t = getTranslator();
     let registry = getTutoRegistry();
-    let targetEl:HTMLElement = $state()!;
+    let targetEl:HTMLElement|null = $state(null);
     let disabledNext = $state(false);
-    let point = $state((e:HTMLElement)=>{});
+    let point = $state((e:HTMLElement|null)=>{});
 
     onMount(()=>{
         const e = registry["lang_selector"] as SvelteComponent;
@@ -34,9 +36,9 @@
                 point(t.element);
                 await wait(200);
                 targetEl = t.element;
-                await typeStr("iPhone 16", (s) => {
+                await typeStr(tgt.collection_name, (s) => {
                     t.actions.setValue(s);
-                });
+                }, 70);
             },
         },
         {
@@ -60,7 +62,7 @@
                 await point(v.element);
                 v.actions.open();
                 await wait(500);
-                b = v.element.querySelectorAll(".options>button")[1];
+                b = v.element.querySelectorAll(".options>button")[2];
                 await point(b);
                 v.actions.select("select");
                 b = v.element.querySelector(".add_attribute");
@@ -72,11 +74,11 @@
             stepName:"attribute_0",
             async in(){
                 const e = registry["attribute_0_elem"] as SvelteComponent;
-                const t = registry["attribute_0"] as SvelteComponent;
-                await point(t.element.querySelector('input'));
-                targetEl = t.element;
+                const c = registry["attribute_0"] as SvelteComponent;
+                await point(c.element.querySelector('input'));
+                targetEl = c.element;
                 await wait(200);
-                await typeStr("Color", (v)=>{
+                await typeStr(tgt.attribute_1[t.lang], (v)=>{
                     e.actions.setValue(v)
                 })
             },
@@ -85,11 +87,11 @@
             stepName:"attribute_1",
             async in(){
                 const e = registry["attribute_1_elem"] as SvelteComponent;
-                const t = registry["attribute_1"] as SvelteComponent;
-                await point(t.element.querySelector('input'));
-                targetEl = t.element;
+                const c = registry["attribute_1"] as SvelteComponent;
+                await point(c.element.querySelector('input'));
+                targetEl = c.element;
                 await wait(200);
-                await typeStr("Size", (v)=>{
+                await typeStr(tgt.attribute_2[t.lang], (v)=>{
                     e.actions.setValue(v)
                 })
             },
@@ -98,7 +100,6 @@
             stepName:"gallery",
             async in(){
                 const e = registry["add_product"] as HTMLElement;
-                //@ts-ignore
                 targetEl = null;
                 await point(e);
                 e.click()
@@ -108,10 +109,10 @@
                 await wait(600);
                 await point(targetEl);
                 await wait(300);
-                g.actions.addImage("https://www.keychron.com/cdn/shop/products/Keychron-Q6-QMK-VIA-custom-mechanical-keyboard-full-size-layout-full-aluminum-black-frame-B-knob-for-Mac-Windows-with-hot-swappable-Gateron-G-Pro-switch-red-Q6-M1Z.jpg?v=1659514285&width=1214")
-                await point(targetEl.querySelector(".carousel>div")!);
+                g.actions.addImage(tgt.gallery[0])
+                await point(targetEl?.querySelector(".carousel>div")!);
                 await wait(300);
-                g.actions.addImage("https://www.keychron.com/cdn/shop/products/Keychron-Q6-QMK-VIA-custom-mechanical-keyboard-full-size-layout-full-aluminum-black-frame-B-knob-for-Mac-Windows-with-hot-swappable-Gateron-G-Pro-switch-red-Q6-M1Z.jpg?v=1659514285&width=1214")
+                g.actions.addImage(tgt.gallery[1])
             }
         },
         {
@@ -124,14 +125,14 @@
             stepName:"product_name",
             async in(){
                 await point(targetEl);
-                targetEl.click();
+                targetEl?.click();
                 let b = (registry["translate_image_1"] as HTMLElement);
                 await point(b);
                 b.click();
                 const e = (registry["product_name"] as SvelteComponent);
                 targetEl = e.element;
                 await point(targetEl);
-                await typeStr("Product name", (v)=>{
+                await typeStr(tgt.title[t.lang], (v)=>{
                     e.actions.setValue(v)
                 })
             }
@@ -139,7 +140,7 @@
         {
             stepName:"translate_product",
             async in(){
-                targetEl = targetEl.querySelector('button')!;
+                targetEl = targetEl?.querySelector('button')!;
                 await point(targetEl);
                 targetEl.click();
             }
@@ -150,19 +151,19 @@
                 let e = (registry["product_description"] as SvelteComponent);
                 targetEl = e.element;
                 await point(targetEl);
-                await typeStr("Product description", (v)=>{
+                await typeStr(tgt.description[t.lang], (v)=>{
                     e.actions.setValue(v)
-                })
+                }, 10)
                 e = (registry["product_attribute_0"] as SvelteComponent);
                 targetEl = e.element;
                 await point(targetEl);
-                await typeStr("Red", (v)=>{
+                await typeStr(tgt.attribute_1_value[t.lang], (v)=>{
                     e.actions.setValue(v)
                 })
                 e = (registry["product_attribute_1"] as SvelteComponent);
                 targetEl = e.element;
                 await point(targetEl);
-                await typeStr("250GB", (v)=>{
+                await typeStr(tgt.attribute_2_value[t.lang], (v)=>{
                     e.actions.setValue(v)
                 })
             }
@@ -174,14 +175,13 @@
                 let b = (registry["close_product"] as HTMLElement);
                 await point(b);
                 point(null as any);
-                //@ts-ignore
                 targetEl = null;
                 b.click()
                 await wait(500)
                 b = (registry["products"] as HTMLElement);
                 targetEl = b;
                 await point((registry["add_product"] as HTMLElement));
-                
+
             }
         }
     ] as ComponentProps<typeof Tuto>["steps"];

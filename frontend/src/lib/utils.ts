@@ -66,12 +66,12 @@ export const getKeys = Object.keys as <T extends object>(obj: T) => Array<keyof 
 
 export const wait = async (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
-export const typeStr = async (v:string, cb:(v:string)=>void)=>{
+export const typeStr = async (v:string, cb:(v:string)=>void, speed=50)=>{
     let acc = ""
     for(let i of v){
         acc +=i;
         cb(acc);
-        await wait(30 + Math.floor(Math.random() * 50));
+        await wait(10 + Math.floor(Math.random() * speed));
     }
 }
 

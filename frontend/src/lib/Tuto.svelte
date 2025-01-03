@@ -14,8 +14,8 @@
             stepName: string;
             in?: (prevStep: number, curStep: number) => void | Promise<void>;
         }[];
-        targetEl: HTMLElement;
-        point: (e: HTMLElement) => void;
+        targetEl: HTMLElement|null;
+        point: (e: HTMLElement|null) => void;
         step: number;
         help: Snippet<[(typeof steps)[number]]>;
         disabledNext: boolean;
@@ -76,7 +76,7 @@
         disabledNext = false;
     };
 
-    point = async (e: HTMLElement) => {
+    point = async (e: HTMLElement|null) => {
         if(!e){
             pointerPos = {
                 x: -50,

@@ -68,7 +68,7 @@
                 ></Component>
             {/snippet}
             {#snippet menu()}
-                <button onclick={removeAttribute(attr)} aria-label={t.t("large_crisp_dove_spur")}>
+                <button onclick={removeAttribute(attr)} class="remove" aria-label={t.t("large_crisp_dove_spur")}>
                     <i class="ri-delete-bin-line"></i>
                 </button>
             {/snippet}
@@ -83,6 +83,20 @@
         display: flex;
         flex-direction: column;
         padding: 1rem 0;
+        .remove{
+            background-color: transparent;
+            border: none;
+            outline: none;
+            background-color: var(--red-a2);
+            height: 100%;
+            padding:0 1rem;
+            color: var(--red-11);
+            &:hover{
+                cursor: pointer;
+                background-color: var(--red-a3);
+                color: var(--red-10);
+            }
+        }
         h2{
             font-family: var(--font-2);
             margin-bottom: 1rem;

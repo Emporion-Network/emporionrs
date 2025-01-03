@@ -7,7 +7,6 @@
         attribute:Attribute,
         lang:SupportedLanguage,
     } = $props();
-    let t = getTranslator();
 
     let element:HTMLElement = $state()!;
 
@@ -24,7 +23,7 @@
 <div class="input-attribute" bind:this={element}>
     <TranslatableInput
         type="text"
-        label={t.t("pretty_any_husky_snip")}
+        label={attribute.trait_type}
         bind:selectedLang={lang}
         bind:value={attribute.value}
     />

@@ -22,7 +22,7 @@
 <div class="input-attribute" bind:this={element}>
     <TranslatableInput
         type="text"
-        label={t.t("due_bald_nuthatch_attend")}
+        label={attribute.trait_type}
         bind:value={attribute.value}
         selectedLang={lang}
     />

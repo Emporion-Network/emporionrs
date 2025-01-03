@@ -4,19 +4,16 @@
     import { storage } from "../../stores/localStorage";
     import {
         getTranslator,
-        supportedLangs,
     } from "../../stores/translate.svelte";
     import Form from "./Form.svelte";
     import type { Product } from "./Form.svelte";
     import Tuto from "./Tuto.svelte";
-    import { TUTORIAL_PRODUCT } from "./tutorialProduct";
     let t = getTranslator();
 
     let didTutorial = storage<boolean>("product-tutorial");
 
     const ondone = () => {
-        // didTutorial.set(true);
-        // products = [];
+        didTutorial.set(true);
     };
 
     let selectedLang = $state(t.lang);

@@ -245,6 +245,12 @@
                 h2 {
                     flex: 1;
                     height: 100%;
+                    font-size: 1.1rem;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 3;
+                    line-clamp: 3;
+                    -webkit-box-orient: vertical;  
+                    overflow: hidden;
                 }
                 button {
                     background-color: transparent;
