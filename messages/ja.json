@@ -56,5 +56,9 @@
 	"ornate_kind_hare_pull": "コレクション名",
 	"clear_front_jackdaw_skip": " コレクション名はユーザーには表示されませんが、<inlang-LineFeed>同じコレクション名の商品は、<inlang-LineFeed>ユーザーに表示されます。",
 	"stout_sea_polecat_favor": "属性を追加",
-	"tangy_active_anaconda_glow": " 製品に追加したい属性タイプを選択します。<inlang-LineFeed>ドロップダウン、チェックボックス、ボタングループ、色などのオプションから<inlang-LineFeed>サイズ、色、素材、スタイルなどの製品バリエーションを定義する<inlang-LineFeed>パターン、またはその他のカスタマイズ可能なオプション。"
+	"tangy_active_anaconda_glow": " 製品に追加したい属性タイプを選択します。<inlang-LineFeed>ドロップダウン、チェックボックス、ボタングループ、色などのオプションから<inlang-LineFeed>サイズ、色、素材、スタイルなどの製品バリエーションを定義する<inlang-LineFeed>パターン、またはその他のカスタマイズ可能なオプション。",
+	"alert_tired_rooster_drum": "製品ギャラリー",
+	"arable_neat_donkey_inspire": "製品画像を選択してアップロードします。すべての言語で同じ画像を使用することも、ビジュアルにローカライズされたコンテンツを反映する必要がある場合は言語ごとに異なる画像をアップロードすることもできます。この柔軟性により、すべての市場で製品が正確に表現されます。",
+	"alive_elegant_barbel_urge": "すべての言語に画像を適用する",
+	"icy_tough_falcon_pray": "このボタンを使用すると、選択した画像をすべての言語に適用できます。これは、画像をローカライズする必要がなく、製品のすべての言語バージョンで一貫性を保つことができる場合に便利です。"
 }

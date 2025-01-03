@@ -38,13 +38,11 @@ $effect.root(() => {
         locale: "en",
     });
     window.ini = ini;
-    lang = defLang;
-    if(ini.locales.get(defLang)) return;
     import(`../../../messages/${defLang}.json`).then(e => {
         window.ini.locale = defLang;
         window.ini.store({
             [defLang]: e,
-        })
+        });
         lang = defLang;
     });
 });
@@ -92,6 +90,8 @@ export const TranslatedLanguages = {
 } as const satisfies {
     [k in typeof langs[number]]: string;
 };
+
+export const supportedLangs = langs as unknown as SupportedLanguage[];
 
 export const Languages = {
     "en": "English",

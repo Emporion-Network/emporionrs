@@ -1,22 +1,14 @@
 <script lang="ts">
+    import type { SvelteComponent } from "svelte";
     import Route from "../../lib/Route.svelte";
-    let x =  $state((v:string)=>{
-        return `${v} Humm`
-    });
-
-    const onclick = ()=>{
-        x = (v:string)=>{
-            return `${v} Hooo`
-        }
-    }
+    import Inp from "./Comp.svelte";
+    import Wpr from "./Wpr.svelte";
+    let c:SvelteComponent;
 </script>
 
-<Route path="/test">
-    <div>
-        <button {onclick}>update</button>
-        {x("hello")}
-    </div>
-</Route>
 
-<style lang="scss">
-</style>
+<Route path="/test">
+    <Wpr bind:c={c}>
+        <Inp bind:this={c}></Inp>
+    </Wpr>
+</Route>

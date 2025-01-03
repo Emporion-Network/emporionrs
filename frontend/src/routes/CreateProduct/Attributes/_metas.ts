@@ -1,7 +1,6 @@
-import type { T } from '../../../stores/translate.svelte';
-import { meta as buttonMeta, type Attribute as ButtonAttribute  } from './Buttons.svelte';
-import { meta as checkboxMeta, type Attribute as CheckboxAttribute } from './Checkbox.svelte';
-import { meta as selectMeta, type Attribute as SelectAttribute } from './Select.svelte';
+import { meta as buttonMeta, type Attribute as ButtonAttribute  } from './Buttons/_meta';
+import { meta as checkboxMeta, type Attribute as CheckboxAttribute } from './Checkbox/_meta';
+import { meta as selectMeta, type Attribute as SelectAttribute } from './Select/_meta';
 
 export const metas = {
     [buttonMeta.type]: buttonMeta,

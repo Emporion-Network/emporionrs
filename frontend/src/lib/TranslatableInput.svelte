@@ -1,7 +1,6 @@
 <script lang="ts">
     import { getTranslator, TranslatedLanguages, type SupportedLanguage, type T } from "../stores/translate.svelte";
     import { api } from "../stores/user.svelte";
-    import { data, type DataAttribute } from "./actions.svelte";
     import Input from "./Input.svelte";
     import ToolTip from "./ToolTip.svelte";
     import { getKeys } from "./utils";
@@ -11,15 +10,11 @@
         selectedLang = $bindable(),
         type,
         label,
-        selector,
-        buttonSelector
     }: {
         value: T<string>;
         selectedLang: SupportedLanguage;
         type: "textarea" | "text";
         label: string;
-        selector?:DataAttribute,
-        buttonSelector?:DataAttribute,
     } = $props();
 
     let missingTranslations = $derived.by(() => {
@@ -32,6 +27,7 @@
 
     let t = getTranslator();
     let percent = $state(1);
+    let element:HTMLElement = $state()!;
 
     const translate = () => {
         let target = selectedLang;
@@ -69,9 +65,19 @@
             value[k] = res[k];
         });
     };
+
+    export const actions = {
+        setValue(v:string){
+            value[selectedLang] = v;
+        }
+    }
+
+    export {
+        element
+    }
 </script>
 
-<div class="translatable-input" style="--percent:{percent}" use:data={selector}>
+<div class="translatable-input" style="--percent:{percent}" bind:this={element}>
     <Input {type} bind:value={value[selectedLang]} {label} placeholder={label}>
         {#if missingTranslations.length}
             <ToolTip openTimout={200}>
@@ -79,7 +85,6 @@
                     aria-label="Auto translate"
                     class="warn"
                     onclick={translate}
-                    use:data={buttonSelector}
                 >
                     <i class="ri-translate"></i>
                 </button>
@@ -98,7 +103,6 @@
                     aria-label="Re translate"
                     class="ok"
                     onclick={retranslate}
-                    use:data={buttonSelector}
                 >
                     <i class="ri-translate"></i>
                 </button>
@@ -107,7 +111,7 @@
                 {/snippet}
             </ToolTip>
         {:else}
-            <button aria-label="Re translate" use:data={buttonSelector} disabled>
+            <button aria-label="Re translate" disabled>
                 <i class="ri-translate"></i>
             </button>
         {/if}

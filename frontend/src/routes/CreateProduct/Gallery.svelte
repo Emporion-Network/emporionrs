@@ -1,7 +1,8 @@
 <script lang="ts">
     import ToolTip from "../../lib/ToolTip.svelte";
     import { getKeys, pickImages } from "../../lib/utils";
-    import { getTranslator, TranslatedLanguages, type SupportedLanguage } from "../../stores/translate.svelte";
+    import { getTranslator, TranslatedLanguages, type SupportedLanguage, Languages } from "../../stores/translate.svelte";
+    import { getTutoRegistry } from "./tutoStore.svelte";
     let t = getTranslator();
 
     let {
@@ -11,6 +12,8 @@
         selectedLang: SupportedLanguage;
         images: Record<SupportedLanguage, string[]>;
     } = $props();
+
+    let registry = getTutoRegistry();
 
     const replaceImage = (id: number) => async () => {
         if(images[selectedLang][id] === undefined){
@@ -50,13 +53,13 @@
 
     let missingImgages = $derived.by(() => {
         let missing: Record<number, SupportedLanguage[]> = {};
-        getKeys(images).forEach((lang) => {
+        getKeys(Languages).forEach((lang) => {
             images[lang].forEach((_, i) => {
                 missing[i] = [];
             });
         });
         getKeys(missing).forEach((imgIdx) => {
-            getKeys(images).forEach((lang) => {
+            getKeys(Languages).forEach((lang) => {
                 if (!images[lang][imgIdx]) {
                     missing[imgIdx].push(lang);
                 }
@@ -64,9 +67,19 @@
         });
         return missing;
     });
+    let element:HTMLElement = $state()!;
+
+    export const actions = {
+        addImage(img:string){
+            images[selectedLang].push(img)
+        }
+    }
+    export {
+        element
+    }
 </script>
 
-{#snippet AutoTranslate(i: number)}
+{#snippet Image(i: number)}
     <div
         class="{i === 0 ? "main-img" : ""} img"
         aria-label="{images[selectedLang]?.[i] ? t.t("plain_calm_goose_ascend") : t.t("antsy_helpful_hamster_enjoy")}"
@@ -82,11 +95,15 @@
                 <i class="ri-indeterminate-circle-line"></i>
             </button>
         {:else}
-            <i class="ri-add-line"></i>
+            <i class="ri-image-add-line"></i>
         {/if}
         {#if missingImgages[i]?.length}
             <ToolTip>
-                <button class="apply-img"  onclick={applyToAll(i)} aria-label="{t.t("jumpy_wise_skate_greet")}">
+                <button 
+                bind:this={registry[`translate_image_${i}`]}
+                class="apply-img"  
+                onclick={applyToAll(i)}
+                aria-label="{t.t("jumpy_wise_skate_greet")}">
                     <i class="ri-translate"></i>
                 </button>
                 {#snippet content()}
@@ -102,16 +119,16 @@
     </div>
 {/snippet}
 
-<div class="gallery">
-    {@render AutoTranslate(0)}
+<div class="gallery" bind:this={element}>
+    {@render Image(0)}
     <div class="wpr">
         <div class="carousel hide-scrollbar">
             {#each images[selectedLang] as _, i}
                 {#if i != 0}
-                    {@render AutoTranslate(i)}
+                    {@render Image(i)}
                 {/if}
             {/each}
-            {@render AutoTranslate(images[selectedLang]?.length || 1)}
+            {@render Image(images[selectedLang]?.length || 1)}
         </div>
     </div>
 </div>

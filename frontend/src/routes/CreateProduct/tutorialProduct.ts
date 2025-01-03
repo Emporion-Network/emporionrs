@@ -1,4 +1,4 @@
-export const TUTORIAL_PRODUCT = {
+export const TUTORIAL_PRODUCT = [{
     "title": {
         "en": "Keychron Q6 QMK Custom Mechanical Keyboard",
         "es": "Teclado mecánico personalizado QMK Keychron Q6",
@@ -38,10 +38,29 @@ export const TUTORIAL_PRODUCT = {
         "zh-tw": "Keychron Q6是一款高級全尺寸及全金屬機械鍵盤。採用全金屬CNC車削機身、全尺寸布局、雙 購物/design、QMK/VIA支援以及旋鈕選項，Q6滿足您的實際需求，並提供高檔的打字體驗。"
     },
     "collection": "Keychron Q6",
-    "gallery":{},
+    "gallery": {
+        "en": ["https://www.keychron.com/cdn/shop/products/Keychron-Q6-QMK-VIA-custom-mechanical-keyboard-full-size-layout-full-aluminum-black-frame-B-knob-for-Mac-Windows-with-hot-swappable-Gateron-G-Pro-switch-red-Q6-M1Z.jpg?v=1659514285&width=1214", "https://www.keychron.com/cdn/shop/products/Keychron-Q6-QMK-VIA-custom-mechanical-keyboard-full-size-layout-full-aluminum-blue-frame-B-knob-for-Mac-Windows-with-hot-swappable-Gateron-G-Pro-switch-red-Q6-O1Z.jpg?v=1659514285&width=1214", "https://www.keychron.com/cdn/shop/products/Keychron-Q6-QMK-VIA-custom-mechanical-keyboard-full-size-layout-full-aluminum-grey-frame-B-knob-for-Mac-Windows-with-hot-swappable-Gateron-G-Pro-switch-brown-Q6-N3Z.jpg?v=1659514285&width=1214"],
+        "es": ["https://www.keychron.com/cdn/shop/products/Keychron-Q6-QMK-VIA-custom-mechanical-keyboard-full-size-layout-full-aluminum-black-frame-B-knob-for-Mac-Windows-with-hot-swappable-Gateron-G-Pro-switch-red-Q6-M1Z.jpg?v=1659514285&width=1214"],
+        "de": ["https://www.keychron.com/cdn/shop/products/Keychron-Q6-QMK-VIA-custom-mechanical-keyboard-full-size-layout-full-aluminum-black-frame-B-knob-for-Mac-Windows-with-hot-swappable-Gateron-G-Pro-switch-red-Q6-M1Z.jpg?v=1659514285&width=1214"],
+        "fa": ["https://www.keychron.com/cdn/shop/products/Keychron-Q6-QMK-VIA-custom-mechanical-keyboard-full-size-layout-full-aluminum-black-frame-B-knob-for-Mac-Windows-with-hot-swappable-Gateron-G-Pro-switch-red-Q6-M1Z.jpg?v=1659514285&width=1214"],
+        "fr": ["https://www.keychron.com/cdn/shop/products/Keychron-Q6-QMK-VIA-custom-mechanical-keyboard-full-size-layout-full-aluminum-black-frame-B-knob-for-Mac-Windows-with-hot-swappable-Gateron-G-Pro-switch-red-Q6-M1Z.jpg?v=1659514285&width=1214"],
+        "gu": ["https://www.keychron.com/cdn/shop/products/Keychron-Q6-QMK-VIA-custom-mechanical-keyboard-full-size-layout-full-aluminum-black-frame-B-knob-for-Mac-Windows-with-hot-swappable-Gateron-G-Pro-switch-red-Q6-M1Z.jpg?v=1659514285&width=1214"],
+        "hi": ["https://www.keychron.com/cdn/shop/products/Keychron-Q6-QMK-VIA-custom-mechanical-keyboard-full-size-layout-full-aluminum-black-frame-B-knob-for-Mac-Windows-with-hot-swappable-Gateron-G-Pro-switch-red-Q6-M1Z.jpg?v=1659514285&width=1214"],
+        "ja": ["https://www.keychron.com/cdn/shop/products/Keychron-Q6-QMK-VIA-custom-mechanical-keyboard-full-size-layout-full-aluminum-black-frame-B-knob-for-Mac-Windows-with-hot-swappable-Gateron-G-Pro-switch-red-Q6-M1Z.jpg?v=1659514285&width=1214"],
+        "ko": ["https://www.keychron.com/cdn/shop/products/Keychron-Q6-QMK-VIA-custom-mechanical-keyboard-full-size-layout-full-aluminum-black-frame-B-knob-for-Mac-Windows-with-hot-swappable-Gateron-G-Pro-switch-red-Q6-M1Z.jpg?v=1659514285&width=1214"],
+        "pl": ["https://www.keychron.com/cdn/shop/products/Keychron-Q6-QMK-VIA-custom-mechanical-keyboard-full-size-layout-full-aluminum-black-frame-B-knob-for-Mac-Windows-with-hot-swappable-Gateron-G-Pro-switch-red-Q6-M1Z.jpg?v=1659514285&width=1214"],
+        "pt-br": ["https://www.keychron.com/cdn/shop/products/Keychron-Q6-QMK-VIA-custom-mechanical-keyboard-full-size-layout-full-aluminum-black-frame-B-knob-for-Mac-Windows-with-hot-swappable-Gateron-G-Pro-switch-red-Q6-M1Z.jpg?v=1659514285&width=1214"],
+        "ro": ["https://www.keychron.com/cdn/shop/products/Keychron-Q6-QMK-VIA-custom-mechanical-keyboard-full-size-layout-full-aluminum-black-frame-B-knob-for-Mac-Windows-with-hot-swappable-Gateron-G-Pro-switch-red-Q6-M1Z.jpg?v=1659514285&width=1214"],
+        "ru": ["https://www.keychron.com/cdn/shop/products/Keychron-Q6-QMK-VIA-custom-mechanical-keyboard-full-size-layout-full-aluminum-black-frame-B-knob-for-Mac-Windows-with-hot-swappable-Gateron-G-Pro-switch-red-Q6-M1Z.jpg?v=1659514285&width=1214"],
+        "tr": ["https://www.keychron.com/cdn/shop/products/Keychron-Q6-QMK-VIA-custom-mechanical-keyboard-full-size-layout-full-aluminum-black-frame-B-knob-for-Mac-Windows-with-hot-swappable-Gateron-G-Pro-switch-red-Q6-M1Z.jpg?v=1659514285&width=1214"],
+        "zh-cn": ["https://www.keychron.com/cdn/shop/products/Keychron-Q6-QMK-VIA-custom-mechanical-keyboard-full-size-layout-full-aluminum-black-frame-B-knob-for-Mac-Windows-with-hot-swappable-Gateron-G-Pro-switch-red-Q6-M1Z.jpg?v=1659514285&width=1214"],
+        "zh-hk": ["https://www.keychron.com/cdn/shop/products/Keychron-Q6-QMK-VIA-custom-mechanical-keyboard-full-size-layout-full-aluminum-black-frame-B-knob-for-Mac-Windows-with-hot-swappable-Gateron-G-Pro-switch-red-Q6-M1Z.jpg?v=1659514285&width=1214"],
+        "zh-tw": ["https://www.keychron.com/cdn/shop/products/Keychron-Q6-QMK-VIA-custom-mechanical-keyboard-full-size-layout-full-aluminum-black-frame-B-knob-for-Mac-Windows-with-hot-swappable-Gateron-G-Pro-switch-red-Q6-M1Z.jpg?v=1659514285&width=1214"],
+    },
     "attributes": [
         {
-            "type": "select",
+            "display_type": "select",
+            "trait_type":"Type",
             "value": {
                 "en": "Barebone",
                 "es": "Esqueleto",
@@ -61,28 +80,10 @@ export const TUTORIAL_PRODUCT = {
                 "zh-hk": "基本的",
                 "zh-tw": "基本骨架"
             },
-            "title": {
-                "en": "Type",
-                "es": "Escribir",
-                "de": "Typ",
-                "fa": "تیپ",
-                "fr": "Taper",
-                "gu": "પ્રકાર",
-                "hi": "प्रकार",
-                "ja": "タイプ",
-                "ko": "타입",
-                "pl": "Typ",
-                "pt-br": "Digite",
-                "ro": "Tip",
-                "ru": "Тип",
-                "tr": "Tür",
-                "zh-cn": "类型",
-                "zh-hk": "類型",
-                "zh-tw": "類型"
-            }
         },
         {
-            "type": "buttons",
+            "display_type": "buttons",
+            "trait_type":"Color",
             "value": {
                 "en": "Carbon Black - B",
                 "es": "Carbon Black - B",
@@ -102,28 +103,10 @@ export const TUTORIAL_PRODUCT = {
                 "zh-hk": "Carbon Black - B",
                 "zh-tw": "Carbon Black - B"
             },
-            "title": {
-                "en": "Color",
-                "es": "Color",
-                "de": "Farbe",
-                "fa": "رنگ",
-                "fr": "Couleur",
-                "gu": "રંગ",
-                "hi": "रंग",
-                "ja": "色",
-                "ko": "색",
-                "pl": "Kolor",
-                "pt-br": "Cor",
-                "ro": "Culoare",
-                "ru": "Цвет",
-                "tr": "Renk",
-                "zh-cn": "颜色",
-                "zh-hk": "色彩",
-                "zh-tw": "顏色"
-            }
         },
         {
-            "type": "buttons",
+            "display_type": "buttons",
+            "trait_type":"Switches",
             "value": {
                 "en": "Gateron G Pro Red",
                 "es": "Gateron G Pro Rojo",
@@ -143,25 +126,6 @@ export const TUTORIAL_PRODUCT = {
                 "zh-hk": "佳達隆 G Pro Red",
                 "zh-tw": "Gateron G Pro 紅軸"
             },
-            "title": {
-                "en": "Switches",
-                "es": "Interruptores",
-                "de": "Schalter",
-                "fa": "سوئیچ‌ها",
-                "fr": "Interrupteurs",
-                "gu": "સ્વિચ",
-                "hi": "स्विच",
-                "ja": "スイッチ",
-                "ko": "스위치",
-                "pl": "Przełączniki",
-                "pt-br": "Interruptores",
-                "ro": "Întrerupătoare",
-                "ru": "Переключатели",
-                "tr": "Anahtarlar",
-                "zh-cn": "交换器",
-                "zh-hk": "開關",
-                "zh-tw": "開關"
-            }
         }
     ]
-};
+}];

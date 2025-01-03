@@ -56,5 +56,9 @@
 	"ornate_kind_hare_pull": "集合名称",
 	"clear_front_jackdaw_skip": " 集合名称对用户不可见，但它确保<inlang-LineFeed>同一系列名称的产品一起显示时<inlang-LineFeed>显示给用户。",
 	"stout_sea_polecat_favor": "添加属性",
-	"tangy_active_anaconda_glow": " 选择要添加到产品的属性类型。选择<inlang-LineFeed>从下拉菜单、复选框、按钮组或颜色等选项到<inlang-LineFeed>定义产品变化，如尺寸、颜色、材料、款式、<inlang-LineFeed>图案或其他可定制的选项。"
+	"tangy_active_anaconda_glow": " 选择要添加到产品的属性类型。选择<inlang-LineFeed>从下拉菜单、复选框、按钮组或颜色等选项到<inlang-LineFeed>定义产品变化，如尺寸、颜色、材料、款式、<inlang-LineFeed>图案或其他可定制的选项。",
+	"alert_tired_rooster_drum": "产品图库",
+	"arable_neat_donkey_inspire": "选择并上传产品图片。您可以选择在所有语言中使用相同的图片，或者如果视觉效果需要反映本地化内容，则为每种语言上传不同的图片。这种灵活性可确保您的产品在所有市场中得到准确展示。",
+	"alive_elegant_barbel_urge": "将图像应用于所有语言",
+	"icy_tough_falcon_pray": "使用此按钮可将所选图片应用于所有语言。当图片不需要本地化并且可以在产品的所有语言版本中保持一致时，此功能非常有用。"
 }

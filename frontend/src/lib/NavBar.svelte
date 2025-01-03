@@ -12,7 +12,6 @@
 </script>
 
 <nav>
-    {api.state?.address}
     <MultiSelect
         options={getKeys(Languages)}
         bind:value={t.lang}
@@ -35,7 +34,9 @@
     <button onclick={theme.toggle}>
         {theme.theme}
     </button>
-    <button onclick={()=> location.goTo('/transfers')}>/transfers</button>
+    <button onclick={()=> location.goTo('/transfer')}>/transfer</button>
+    <button onclick={()=> location.goTo('/create-product')}>/create-product</button>
+
 </nav>
 
 <style lang="scss">
@@ -43,5 +44,9 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        z-index: 9;
+        :global(.multi-select){
+            width: 300px;
+        }
     }
 </style>

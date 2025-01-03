@@ -1,7 +1,6 @@
 <script lang="ts">
     import type { Snippet } from "svelte";
     import type { SvelteSet } from "svelte/reactivity";
-    import { data, type DataAttribute } from "./actions.svelte";
 
     type T = $$Generic;
     type K = $$Generic<boolean>;
@@ -16,7 +15,6 @@
         filter = $bindable(),
         label = "",
         placeholder = "",
-        selector,
     }: {
         value: typeof multiple extends true ? NoInfer<SvelteSet<T>> : T;
         optionRenderer: Snippet<[T, boolean]>;
@@ -29,12 +27,13 @@
         multiple: K;
         label?: string;
         placeholder?: string;
-        selector?:DataAttribute;
     } = $props();
 
     const isMultiple = (b: SvelteSet<T> | T): b is SvelteSet<T> => {
         return multiple === true;
     };
+
+    let el:HTMLElement = $state()!;
 
     const slectOption = (o: T) => () => {
         if (!isMultiple(value)) {
@@ -51,15 +50,23 @@
             document.activeElement.blur();
         }, 100)
     };
+
+    export const actions = {
+        setValue:(v:T) => slectOption(v)(),
+        open:()=> el.focus(),
+    };
+    export {
+        el as element
+    };
 </script>
 
 <div
+    bind:this={el}
     class="multi-select"
     class:hasValue={(isMultiple(value) && value.size > 0) ||
         (!isMultiple(value) && value)}
     tabindex="0"
     role="listbox"
-    use:data={selector}
 >
     <div class="selected">
         {#if (isMultiple(value) && value.size > 0) || (!isMultiple(value) && value)}
@@ -80,7 +87,7 @@
         {/if}
         {#each options as option (option)}
             {#if !filter || filter(option)}
-                <button onclick={slectOption(option)}>
+                <button onclick={slectOption(option)} >
                     {@render optionRenderer(
                         option,
                         isMultiple(value) ? value.has(option) : value == option,
@@ -190,7 +197,6 @@
             flex-direction: column;
             border: 1px solid var(--neutral-6);
             background-color: var(--bg-color, var(--neutral-1));
-            z-index: 1;
 
             .filter{
                 position: sticky;

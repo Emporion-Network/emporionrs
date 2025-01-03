@@ -66,6 +66,14 @@ export const getKeys = Object.keys as <T extends object>(obj: T) => Array<keyof 
 
 export const wait = async (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
+export const typeStr = async (v:string, cb:(v:string)=>void)=>{
+    let acc = ""
+    for(let i of v){
+        acc +=i;
+        cb(acc);
+        await wait(30 + Math.floor(Math.random() * 50));
+    }
+}
 
 export const pickImages = (multiple:boolean = true) => {
     return new Promise<File[]>((resolve) => {

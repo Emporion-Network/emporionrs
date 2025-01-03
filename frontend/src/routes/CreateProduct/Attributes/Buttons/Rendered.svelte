@@ -1,5 +1,5 @@
 <script lang="ts">
-    import ButtonGroup from "../../../lib/ButtonGroup.svelte";
+    import ButtonGroup from "../../../../lib/ButtonGroup.svelte";
     let {
         title = $bindable(),
         value = $bindable(),

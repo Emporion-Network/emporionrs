@@ -1,53 +1,102 @@
 <script lang="ts">
-    import { type Snippet } from "svelte";
-
-    type T = $$Generic<string[]>;
+    import { type Snippet, untrack } from "svelte";
+    import { wait } from "./utils";
     let {
-        elementSelectors,
-        help,
+        targetEl = $bindable(),
         step = $bindable(),
+        disabledNext,
+        steps,
+        help,
         ondone,
+        point = $bindable(),
     }: {
-        elementSelectors: T;
+        steps: {
+            stepName: string;
+            in?: (prevStep: number, curStep: number) => void | Promise<void>;
+        }[];
+        targetEl: HTMLElement;
+        point: (e: HTMLElement) => void;
         step: number;
-        help: Snippet<[T[number], DOMRect]>;
+        help: Snippet<[(typeof steps)[number]]>;
+        disabledNext: boolean;
         ondone: () => void;
     } = $props();
 
-    let currStep = $derived(elementSelectors[step]);
+    let currStep = $derived(steps[step]);
     let currEl = $state(new DOMRect());
     let size = $state(new DOMRect());
     let visible = $state(true);
-    let elmt:HTMLElement|undefined = $state();
+    let tutoEl: HTMLElement | undefined = $state();
+    let contentEl: HTMLElement | undefined = $state();
+    let pointerPos = $state({ x: -20, y: -20 });
+    let click = $state(false);
 
     $effect(() => {
         size;
-        let el = document.querySelector(
-            `[tuto-selector="${currStep}"]`,
-        ) as HTMLElement;
-        let rect = el?.getBoundingClientRect();
-        let other = elmt?.getBoundingClientRect();
-        el.scrollIntoView({
-            behavior:"smooth",
-            block:"center"
-        })
-        if (el&&other) currEl = new DOMRect(
-            rect.x - other.x,
-            rect.y - other.y,
-            rect.width,
-            rect.height,
-        );
+        targetEl;
+        untrack(() => {
+            setPosition();
+        });
     });
+
+    const setPosition = () => {
+        if (!(targetEl && tutoEl)) {
+            currEl = new DOMRect(0, 0, 0, -25);
+            tutoEl?.scrollIntoView({
+                behavior:"smooth",
+                block:"start",
+            })
+            return;
+        };
+        let targetRect = targetEl?.getBoundingClientRect();
+        let tutoRect = tutoEl?.getBoundingClientRect();
+
+        targetEl.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+        });
+
+        let x = targetRect.x - tutoRect.x;
+        let y = targetRect.y - tutoRect.y;
+        let w = targetRect.width;
+        let h = targetRect.height;
+
+        currEl = new DOMRect(x, y, w, h);
+    };
 
     const close = () => {
         visible = false;
         ondone();
     };
-    const next = () => {
+    const next = async () => {
+        let prevStep = step;
         step++;
+        disabledNext = true;
+        await currStep.in?.(prevStep, step);
+        disabledNext = false;
     };
-    const prev = () => {
-        step--;
+
+    point = async (e: HTMLElement) => {
+        if(!e){
+            pointerPos = {
+                x: -50,
+                y: -50,
+            };
+            return;
+        }
+        if (!tutoEl) return;
+        let tutoRect = tutoEl?.getBoundingClientRect();
+        let targetRect = e?.getBoundingClientRect();
+        let x = targetRect.x - tutoRect.x;
+        let y = targetRect.y - tutoRect.y;
+        pointerPos = {
+            x: x + targetRect.width / 2,
+            y: y + targetRect.height / 2,
+        };
+        await wait(200)
+        click = true;
+        await wait(200)
+        click = false;
     };
 </script>
 
@@ -59,52 +108,92 @@
         style:--w="{currEl.width + 20}px"
         style:--h="{currEl.height + 20}px"
         bind:contentRect={size}
-        bind:this={elmt}
+        bind:this={tutoEl}
     >
-        <div class="wpr">
-            <div class="help">
+        <div class="wpr" class:hide={currEl.height <= 0}>
+            <div class="help" bind:this={contentEl}>
+                <button class="skip" onclick={close}> Skip tutorial </button>
                 <div class="content">
-                    {@render help(currStep, currEl)}
+                    {@render help(currStep)}
                 </div>
                 <div class="buttons">
-                    <button onclick={prev} disabled={step == 0}>
-                        <i class="ri-arrow-left-line"></i> Prev
-                    </button>
-                    {#if step < elementSelectors.length - 1}
-                        <button onclick={next}>
+                    {#if step < steps.length - 1}
+                        <button onclick={next} disabled={disabledNext}>
                             Next <i class="ri-arrow-right-line"></i>
                         </button>
                     {:else}
-                        <button class="done" onclick={close}> Finish </button>
+                        <button class="done" onclick={close}>
+                            Get started
+                        </button>
                     {/if}
                 </div>
             </div>
         </div>
+        <div
+            class="pointer"
+            style:--x="{pointerPos.x}px"
+            style:--y="{pointerPos.y}px"
+            class:click
+        ></div>
     </div>
 {/if}
 
 <style lang="scss">
     .tuto {
-        background-color: var(--black-a9);
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-        z-index: 2;
-        transition: all 200ms ease-in-out;
-        clip-path: polygon(
-            0% 0%,
-            0% 100%,
-            var(--x) 100%,
-            var(--x) var(--y),
-            calc(var(--x) + var(--w)) var(--y),
-            calc(var(--x) + var(--w)) calc(var(--y) + var(--h)),
-            var(--x) calc(var(--y) + var(--h)),
-            var(--x) 100%,
-            100% 100%,
-            100% 0%
-        );
+        &::before {
+            content: "";
+            background-color: var(--black-a9);
+            // transition: all 200ms ease-in-out;
+            clip-path: polygon(
+                0% 0%,
+                0% 100%,
+                var(--x) 100%,
+                var(--x) var(--y),
+                calc(var(--x) + var(--w)) var(--y),
+                calc(var(--x) + var(--w)) calc(var(--y) + var(--h)),
+                var(--x) calc(var(--y) + var(--h)),
+                var(--x) 100%,
+                100% 100%,
+                100% 0%
+            );
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .pointer {
+            width: 20px;
+            height: 20px;
+            border-radius: 20px;
+            position: absolute;
+            background-color: var(--main-a7);
+            content: "";
+            left: 20px;
+            top: 20px;
+            z-index: 2;
+            transition: all 200ms ease-in-out;
+            left: calc(var(--x) - 2px);
+            top: calc(var(--y) - 2px);
+            &.click {
+                animation: click 200ms ease-in forwards;
+            }
+            @keyframes click {
+                0% {
+                    box-shadow: 0 0 0 0px var(--main-a10);
+                    background-color: var(--main-a10);
+                }
+                100% {
+                    box-shadow: 0 0 0 20px var(--main-a1);
+                }
+            }
+        }
+
         .wpr {
             position: absolute;
             left: calc(var(--x) - 2px);
@@ -114,12 +203,19 @@
             border: 1px solid var(--main-11);
             border-radius: 3px;
             transition: all 200ms ease-in-out;
+            z-index: 1;
+            &.hide{
+                border: none;
+                .help{
+                    display: none;
+                }
+            }
             .help {
                 position: absolute;
-                top: 100%;
+                top: 0%;
+                left: 100%;
                 width: 400px;
-                margin-top: 1rem;
-                left: 0;
+                margin-left: 1rem;
                 padding: 1rem;
                 background-color: var(--neutral-2);
                 border-radius: 3px;
@@ -127,6 +223,21 @@
                 display: flex;
                 flex-direction: column;
                 gap: 1rem;
+                position: relative;
+                padding-top: 1.5rem;
+                .skip {
+                    position: absolute;
+                    background-color: transparent;
+                    right: 0;
+                    top: 0;
+                    border: none;
+                    color: var(--neutral-10);
+                    padding: 0.5rem;
+                    cursor: pointer;
+                    &:hover {
+                        color: var(--neutral-11);
+                    }
+                }
                 .buttons {
                     display: flex;
                     gap: 1rem;
@@ -137,17 +248,23 @@
                         border-radius: 3px;
                         cursor: pointer;
                         outline: none;
-                        &:hover{
+                        &:hover {
                             background-color: var(--neutral-4);
                             border: 1px solid var(--neutral-7);
                         }
-                        &.done{
+                        &.done {
                             background-color: var(--main-3);
                             border: 1px solid var(--main-6);
-                            &:hover{
+                            &:hover {
                                 background-color: var(--main-4);
                                 border: 1px solid var(--main-7);
                             }
+                        }
+                        &:disabled {
+                            background-color: transparent;
+                            border: 1px solid var(--neutral-6);
+                            color: var(--neutral-6);
+                            cursor: default;
                         }
                     }
                 }

@@ -2,7 +2,6 @@
     import type { Snippet } from "svelte";
     import { type FormEventHandler } from "svelte/elements";
     import Autocompleter from "./Autocompleter.svelte";
-    import { data, type DataAttribute } from "./actions.svelte";
 
     let {
         value = $bindable(),
@@ -13,13 +12,11 @@
         children,
         //@ts-ignore
         completions = $bindable(),
-        selector,
     }: {
         label: string;
         placeholder: string;
         error?: boolean;
         children?: Snippet<[]>;
-        selector?:DataAttribute,
     } & (
         | {
               value?: string | number;
@@ -38,6 +35,7 @@
 
     let lastValid: any = "";
     let ipt = $state(value?.toString());
+    let el:HTMLElement = $state()!;
 
     const validate: FormEventHandler<HTMLInputElement> = (e) => {
         const regex =
@@ -53,9 +51,17 @@
     const clear = () => {
         value = "";
     };
+    export const actions = {
+        setValue(nv:typeof value){
+            value = nv;
+        }
+    }
+    export {
+        el as element
+    }
 </script>
 
-<label class="input {type}" class:error use:data={selector}>
+<label class="input {type}" class:error bind:this={el}>
     <div>{label}</div>
     {#if type == "text"}
         <input class="native" type="text" {placeholder} bind:value />

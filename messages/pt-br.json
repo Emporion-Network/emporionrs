@@ -56,5 +56,9 @@
 	"ornate_kind_hare_pull": "Nome da coleção",
 	"clear_front_jackdaw_skip": " O nome da coleção não é visível para os usuários, mas garante que\nprodutos com o mesmo nome de coleção são exibidos juntos quando\nmostrado aos usuários.",
 	"stout_sea_polecat_favor": "Adicionar Atributo",
-	"tangy_active_anaconda_glow": " Selecione o tipo de atributo que você deseja adicionar ao produto. Escolha\nde opções como Dropdown, Checkbox, Button Group ou Color para\ndefinir variações do produto, como tamanho, cor, material, estilo,\npadrão ou outras opções personalizáveis."
+	"tangy_active_anaconda_glow": " Selecione o tipo de atributo que você deseja adicionar ao produto. Escolha\nde opções como Dropdown, Checkbox, Button Group ou Color para\ndefinir variações do produto, como tamanho, cor, material, estilo,\npadrão ou outras opções personalizáveis.",
+	"alert_tired_rooster_drum": "Galeria de produtos",
+	"arable_neat_donkey_inspire": "Selecione e carregue imagens de produtos. Você pode escolher usar a mesma imagem em todos os idiomas ou carregar imagens diferentes para cada idioma se os visuais precisarem refletir conteúdo localizado. Essa flexibilidade garante que seu produto seja representado com precisão em todos os mercados.",
+	"alive_elegant_barbel_urge": "Aplicar imagem a todos os idiomas",
+	"icy_tough_falcon_pray": "Use este botão para aplicar a imagem selecionada a todos os idiomas. Isso é útil quando a imagem não precisa de localização e pode permanecer consistente em todas as versões de idioma do produto."
 }

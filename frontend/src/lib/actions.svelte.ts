@@ -40,9 +40,9 @@ export function trapFocus(node: HTMLElement) {
   });
 }
 
-export type DataAttribute = `${string}=${string}`;
-export function data(node:HTMLElement, value?:DataAttribute){
-  if(value){
-    node.setAttribute(...value.split('=') as [string, string])
-  }
-}
+// export type DataAttribute = `${string}=${string}`;
+// export function data(node:HTMLElement, value?:DataAttribute){
+//   if(value){
+//     node.setAttribute(...value.split('=') as [string, string])
+//   }
+// }

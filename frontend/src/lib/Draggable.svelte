@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { Snippet } from "svelte";
+
     let {
         onswap,
         content,
@@ -41,6 +42,10 @@
             }
         }
     };
+
+    export {
+        el as element
+    }
 </script>
 
 <svelte:body
@@ -49,7 +54,10 @@
     onmousemove={dragMove}
     ontouchmove={dragMove}
 />
-<div class="draggable" class:dragging={drag} style="--y:{dy}" bind:this={el}>
+<div class="draggable" 
+class:dragging={drag} 
+style="--y:{dy}" 
+bind:this={el}>
     <div class="wrpr">
         <div class="handler">
             <button
