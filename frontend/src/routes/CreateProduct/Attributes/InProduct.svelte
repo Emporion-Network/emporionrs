@@ -4,6 +4,8 @@
     import Buttons from "./Buttons/InProduct.svelte";
     import Checkbox from "./Checkbox/InProduct.svelte";
     import Select from "./Select/InProduct.svelte";
+    import Color from "./Color/InProduct.svelte";
+
     import { getTutoRegistry } from "../tutoStore.svelte";
     let {
         attributes = $bindable(),
@@ -16,6 +18,7 @@
         [metas.buttons.type]: Buttons,
         [metas.checkbox.type]: Checkbox,
         [metas.select.type]: Select,
+        [metas.color.type]: Color,
     };
     let registry = getTutoRegistry();
 </script>

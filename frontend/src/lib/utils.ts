@@ -66,16 +66,16 @@ export const getKeys = Object.keys as <T extends object>(obj: T) => Array<keyof 
 
 export const wait = async (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
-export const typeStr = async (v:string, cb:(v:string)=>void, speed=50)=>{
+export const typeStr = async (v: string, cb: (v: string) => void, speed = 50) => {
     let acc = ""
-    for(let i of v){
-        acc +=i;
+    for (let i of v) {
+        acc += i;
         cb(acc);
         await wait(10 + Math.floor(Math.random() * speed));
     }
 }
 
-export const pickImages = (multiple:boolean = true) => {
+export const pickImages = (multiple: boolean = true) => {
     return new Promise<File[]>((resolve) => {
         let el = document.createElement('input');
         el.type = "file"
@@ -87,4 +87,15 @@ export const pickImages = (multiple:boolean = true) => {
         }
         el.click();
     })
+}
+
+export const intersect = <T>(...arrs: T[][]) => {
+    if (arrs.length === 0) {
+        return [];
+    }
+    let result = new Set(arrs[0]);
+    for (let i = 1; i < arrs.length; i++) {
+        result = new Set([...result].filter(x => arrs[i].includes(x)));
+    }
+    return [...result];
 }

@@ -1,20 +1,16 @@
 <script lang="ts">
     import Input from "../../../../lib/Input.svelte";
-    import TranslatableInput from "../../../../lib/TranslatableInput.svelte";
-    import { getTranslator, type SupportedLanguage } from "../../../../stores/translate.svelte";
     import {type Attribute} from "./_meta";
-    let { attribute = $bindable(), lang = $bindable() }: {
+    let { attribute = $bindable() } : {
         attribute:Attribute,
-        lang:SupportedLanguage,
     } = $props();
 
-    let t = getTranslator();
     let element:HTMLElement = $state()!;
 
     export const actions = {
         setValue(v:string){
             attribute.trait_type = v;
-        },
+        }
     }
     export {
         element
@@ -22,5 +18,4 @@
 </script>
 <div class="attribute" bind:this={element}>
     <Input type="text" label="Trait name" placeholder="Trait name" bind:value={attribute.trait_type}/>
-    <TranslatableInput type="textarea" label={t.t("flat_alive_porpoise_read")} bind:selectedLang={lang} bind:value={attribute.description}/>
 </div>

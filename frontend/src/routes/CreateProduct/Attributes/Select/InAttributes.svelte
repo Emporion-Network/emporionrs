@@ -18,5 +18,5 @@
     }
 </script>
 <div class="attribute" bind:this={element}>
-    <Input type="text" label="Trait type" placeholder="Trait type" bind:value={attribute.trait_type}/>
+    <Input type="text" label="Trait name" placeholder="Trait name" bind:value={attribute.trait_type}/>
 </div>

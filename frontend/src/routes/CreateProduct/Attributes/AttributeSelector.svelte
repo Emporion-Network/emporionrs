@@ -44,7 +44,7 @@
 </script>
 <div class="attribute-selector" bind:this={el}>
     <MultiSelect
-        options={["buttons", "checkbox", "select"] as const}
+        options={["buttons", "checkbox", "select", "color"] as const}
         label={t.t("level_arable_robin_talk")}
         placeholder={t.t("level_arable_robin_talk")}
         bind:value={attributeType}

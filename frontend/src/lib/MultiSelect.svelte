@@ -69,7 +69,7 @@
     role="listbox"
 >
     <div class="selected">
-        {#if (isMultiple(value) && value.size > 0) || (!isMultiple(value) && value)}
+        {#if (isMultiple(value) && value.size > 0) || (!isMultiple(value) && value !== undefined)}
             {@render valueRenderer(value)}
         {:else}
             <div class="placeholder">{placeholder}</div>

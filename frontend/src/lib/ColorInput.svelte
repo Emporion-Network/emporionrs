@@ -20,6 +20,8 @@
         value = v.toUpperCase();
     };
 
+    let element:HTMLElement = $state()!;
+
     let invalid = $derived.by(() => {
         return [0, 1, 2, 5, 7].includes(value.length);
     });
@@ -43,9 +45,22 @@
         "9295A2",
         "7D6F63",
     ];
+
+    export const actions = {
+        setValue(v:string){
+            value = v
+        },
+        open(){
+            element.querySelector('button')!.focus()
+        }
+    }
+
+    export {
+        element
+    }
 </script>
 
-<div class="color-picker">
+<div class="color-picker" bind:this={element}>
     <button class="selected" >
         <div class="color" class:invalid style="--c:#{value}"></div>
         <span>#{value}</span>
@@ -85,13 +100,12 @@
         }
         .selected {
             display: flex;
-            height: var(--height-2);
             align-items: center;
             width: max-content;
             border: 1px solid var(--neutral-6);
             min-width: 100px;
             border-radius: 3px;
-            padding: 0.5rem;
+            padding: 0.75rem 0.5rem;
             gap: 0.5rem;
             background-color: transparent;
             color: var(--neutral-12);
@@ -114,7 +128,7 @@
 
         .color {
             aspect-ratio: 1;
-            height: 100%;
+            height: 1.5rem;
             border-radius: 3px;
             position: relative;
             overflow: hidden;
@@ -160,7 +174,7 @@
             padding: 0.5rem;
             display: flex;
             flex-direction: column;
-            max-width: 300px;
+            max-width: 350px;
             gap: 1rem;
             position: absolute;
             top: 100%;
@@ -170,6 +184,7 @@
             margin-top: 0.5rem;
             display: none;
             border: 1px solid var(--neutral-6);
+            z-index: 2;
         }
 
         .colors {
@@ -182,6 +197,7 @@
                 outline: none;
                 border-radius: 3px;
                 border: none;
+                width: 1.5rem;
                 &:hover{
                     cursor: pointer;
                     filter:brightness(1.5) saturate(1.5);

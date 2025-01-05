@@ -8,6 +8,8 @@
     import Form from "./Form.svelte";
     import type { Product } from "./Form.svelte";
     import Tuto from "./Tuto.svelte";
+    import Preview from "./Preview.svelte";
+    import {DEV} from "./tutorialProduct";
     let t = getTranslator();
 
     let didTutorial = storage<boolean>("product-tutorial");
@@ -23,15 +25,15 @@
         }, 10);
     });
 
-    let products: Product[] = $state([]);
+    let products: Product[] = $state(DEV as any);
 </script>
 
 <Route path="/create-product">
     <div class="create-product">
         <Form bind:products bind:selectedLang></Form>
-        <div class="preview"></div>
+        <Preview {products} {selectedLang}></Preview>
         {#if !didTutorial.get()}
-            <Tuto {ondone}></Tuto>
+            <Tuto {ondone} bind:products></Tuto>
         {/if}
     </div>
 </Route>
@@ -42,8 +44,6 @@
         padding: 1rem;
         position: relative;
         min-height: 100vh;
-        .preview {
-            flex: 5;
-        }
+        gap: 1rem;
     }
 </style>

@@ -1,16 +1,20 @@
 <script lang="ts">
-    import MultiSelect from "../../../lib/MultiSelect.svelte";
     import {
         type SupportedLanguage,
         getTranslator,
     } from "../../../stores/translate.svelte";
-    import Buttons from "./Buttons/InAttributes.svelte";
-    import Checkbox from "./Checkbox/InAttributes.svelte";
-    import Select from "./Select/InAttributes.svelte";
     import { metas, type Attribute } from "./_metas";
     import Draggable from "../../../lib/Draggable.svelte";
     import { getTutoRegistry } from "../tutoStore.svelte";
     import AttributeSelector from "./AttributeSelector.svelte";
+
+    import Buttons from "./Buttons/InAttributes.svelte";
+    import Checkbox from "./Checkbox/InAttributes.svelte";
+    import Select from "./Select/InAttributes.svelte";
+    import Color from "./Color/InAttributes.svelte";
+
+   
+
     let {
         attributes = $bindable(),
         selectedLang,
@@ -34,6 +38,7 @@
         [metas.buttons.type]: Buttons,
         [metas.checkbox.type]: Checkbox,
         [metas.select.type]: Select,
+        [metas.color.type]:Color,
     };
 
     const removeAttribute = (attribute: Attribute) => () => {
@@ -87,13 +92,13 @@
             background-color: transparent;
             border: none;
             outline: none;
-            background-color: var(--red-a2);
+            background-color: var(--red-a1);
             height: 100%;
             padding:0 1rem;
             color: var(--red-11);
             &:hover{
                 cursor: pointer;
-                background-color: var(--red-a3);
+                background-color: var(--red-a2);
                 color: var(--red-10);
             }
         }

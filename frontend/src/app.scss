@@ -24,12 +24,13 @@
 
 @include map_color("indigo", "main");
 @include map_color("gray", "neutral");
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 
 
 :root {
   --font-1: "Inter";
-  --font-2: "Josefin Sans";
+  --font-mono: "JetBrains Mono";
+  --font-2: "Inter";
   --height-2: 2.5rem;
 }
 
@@ -95,7 +96,7 @@ h6 {
 }
 
 h1 {
-  font-family: var(--font-2);
+  font-family: var(--font-1);
 }
 
 .hide-scrollbar{

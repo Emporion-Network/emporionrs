@@ -115,6 +115,15 @@
                     </ul>
                 {/snippet}
             </ToolTip>
+            {:else if missingImgages[i]?.length === 0}
+            <ToolTip>
+                <button 
+                class="apply-img ok"  
+                aria-label="All images are present"><i class="ri-translate"></i></button>
+                {#snippet content()}
+                    <p>All images are present</p>
+                {/snippet}
+            </ToolTip>
         {/if}
     </div>
 {/snippet}
@@ -150,7 +159,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 2rem;
+            &>i{
+                font-size: 1.2rem;
+            }
             &:hover {
                 background-color: var(--neutral-a3);
                 border: 1px solid var(--neutral-7);
@@ -202,14 +213,19 @@
             outline: none;
             aspect-ratio: 1;
             border-radius: 3px;
-            border: 1px solid var(--orange-6);
             align-self: flex-start;
             border-style: solid;
             color: var(--orange-11);
+            border: 1px solid var(--orange-6);
             background-color: var(--orange-3);
             position: absolute;
             top: 0.5rem;
             right: 0.5rem;
+            &.ok{
+                color: var(--green-11);
+                border: 1px solid var(--green-6);
+                background-color: var(--green-3);
+            }
         }
     }
 </style>

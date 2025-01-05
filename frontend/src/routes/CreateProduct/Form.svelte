@@ -84,6 +84,7 @@
         products;
         untrack(() => {
             attributes = $state.snapshot(products[0]?.attributes) || [];
+            collectionName = products[0]?.collection || "";
         });
     });
 
@@ -191,20 +192,21 @@
         </div>
     {/if}
 </div>
+<!-- <button onclick={()=>console.log(products)}>log</button> -->
 
 <style lang="scss">
     .form {
         flex: 3;
         position: relative;
         display: flex;
-        flex-direction: column;
-        gap: 1rem;
+        overflow: hidden;
         padding-top: 1rem;
 
         .colloection{
             display: flex;
             flex-direction: column;
             gap: 1rem;
+            min-width: 100%;
         }
 
         .product {
@@ -212,9 +214,8 @@
             display: flex;
             flex-direction: column;
             gap: 1rem;
-            opacity: 1;
             z-index: 1;
-            gap: 1rem;
+            min-width: 100%;
         }
 
         .products {
@@ -235,6 +236,7 @@
                 &>img {
                     width: 80px;
                     height: 80px;
+                    object-fit: cover;
                     border-radius: 2px;
                     aspect-ratio: 1;
                     display: flex;
@@ -248,7 +250,7 @@
                     font-size: 1.1rem;
                     display: -webkit-box;
                     -webkit-line-clamp: 3;
-                    line-clamp: 3;
+                    line-clamp: 2;
                     -webkit-box-orient: vertical;  
                     overflow: hidden;
                 }
