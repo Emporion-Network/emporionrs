@@ -10,12 +10,14 @@
         value,
         pref = $bindable(),
         prefs,
+        onupdate,
     }:{
         attributes:Attribute[],
         selectedLang:SupportedLanguage,
         value:number,
         pref:number[],
-        prefs:number[][]
+        prefs:number[][],
+        onupdate:(v:number[])=>void;
     } = $props();
 
     let options = $derived.by(()=>{
@@ -39,6 +41,7 @@
     }
     const set = (i:number)=>{
         pref = options[i];
+        onupdate(options[i]);
     }
 
     const isAvailable = (i:number)=>{

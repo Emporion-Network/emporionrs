@@ -9,8 +9,10 @@
     readonly?:boolean,
   } = $props();
 
-  const toggle = ()=>{
+  const toggle = (e:Event)=>{
     if(readonly) return;
+    e.stopImmediatePropagation();
+    e.preventDefault();
     value = !value;
   }
 </script>
@@ -36,18 +38,19 @@
         font-weight: 900;
         &.readonly{
           cursor: default;
+          &.selected,
+          &:hover{
+            background-color: transparent;
+            border: 1px solid var(--neutral-7);
+          }
         }
         &:hover, &:focus-visible{
-            border: 1px solid var(--main-10);
-            background-color: var(--main-8);
+            background-color: var(--main-4);
+            border: 1px solid var(--main-7);
         }
         &.selected{
-            background-color: var(--main-10);
-            color: var(--main-1);
+            color: var(--main-12);
             border: 1px solid var(--main-10);
-            &:hover, &:focus-visible{
-              background-color: var(--main-8);
-            }
         }
     }
 </style>

@@ -38,29 +38,34 @@
 
     let pref: number[][] = $state([]);
 
-    const get = (i: number) => () => {
-        return pref[i];
-    };
-    const set = (i: number) => (v: number[]) => {
-        pref[i] = v;
+
+    const update = (v: number[])=>{
         const tgt = intersect(...pref);
         if (tgt.length === 0) {
-            selectedProductId = v[0];
-        } else if (!tgt.includes(selectedProductId)) {
-            selectedProductId = tgt[0];
+            let val = [...v].sort((b, a)=>{
+                return pref.reduce((acc, p) => acc + p.indexOf(a), 0) -
+                pref.reduce((acc, p) => acc + p.indexOf(b), 0);
+
+            })[0];
+            selectedProductId = val;
+        } else {
+            selectedProductId = tgt[0]; 
+            // should always have only 1 
+            // otherways its the same product and picking any of them is fine
         }
-    };
+    }
 </script>
 
 <div class="attributes">
     {#each attributes as attr, i}
         {@const Component = map[attr[0].display_type] as any}
         <Component
-            bind:pref={get(i), set(i)}
+            bind:pref={pref[i]}
             attributes={attributes[i]}
-            selectedLang={selectedLang}
+            {selectedLang}
             value={selectedProductId}
             prefs={pref}
+            onupdate={update}
         />
     {/each}
 </div>

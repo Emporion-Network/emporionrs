@@ -24,3 +24,11 @@
     <Input type="text" label="Trait name" placeholder="Trait name" bind:value={attribute.trait_type}/>
     <TranslatableInput type="textarea" label={t.t("flat_alive_porpoise_read")} bind:selectedLang={lang} bind:value={attribute.description}/>
 </div>
+
+<style lang="scss">
+    .attribute{
+        display: flex;
+        flex-direction: column;
+        gap:1rem;
+    }
+</style>
