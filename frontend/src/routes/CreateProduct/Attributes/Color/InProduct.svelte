@@ -2,7 +2,7 @@
 <script lang="ts">
     import ColorInput from "../../../../lib/ColorInput.svelte";
     import TranslatableInput from "../../../../lib/TranslatableInput.svelte";
-    import {type SupportedLanguage} from '../../../../stores/translate.svelte';
+    import {getTranslator, type SupportedLanguage} from '../../../../stores/translate.svelte';
     import type { Attribute } from "./_meta";
     let { attribute = $bindable(), lang = $bindable() }: {
         attribute:Attribute,
@@ -10,6 +10,7 @@
     } = $props();
 
     let element:HTMLElement = $state()!;
+    let t = getTranslator();
 
     export const actions = {
         setLabel(v:string){
@@ -31,7 +32,7 @@
     <ColorInput bind:value={attribute.value} />
     <TranslatableInput
         type="text"
-        label={"Color name"}
+        label={t.t("fancy_awful_spider_forgive")}
         bind:selectedLang={lang}
         bind:value={attribute.label}
     />

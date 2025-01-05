@@ -85,7 +85,7 @@ bind:this={el}>
             display: flex;
             flex: 1;
             transform: translateY(calc(var(--y) * 1px));
-            background-color: var(--neutral-1);
+            background-color: var(--parent-bg, var(--neutral-1));
             justify-content: center;
             align-items: center;
             border: 1px solid var(--neutral-6);

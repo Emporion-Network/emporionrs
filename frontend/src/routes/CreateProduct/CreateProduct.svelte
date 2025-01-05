@@ -41,7 +41,6 @@
 <style lang="scss">
     .create-product {
         display: flex;
-        padding: 1rem;
         position: relative;
         min-height: 100vh;
         gap: 1rem;

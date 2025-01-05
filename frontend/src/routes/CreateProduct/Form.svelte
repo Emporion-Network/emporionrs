@@ -136,15 +136,18 @@
             <div class="products" bind:this={registry["products"]}>
                 {#each products as product, i}
                     <div class="preview">
-                        {#if product.gallery[selectedLang][0]}
-                            <img src={product.gallery[selectedLang][0]} alt="" />
-                            {:else}
+                        {#if product.gallery[t.lang][0]}
+                            <img
+                                src={product.gallery[t.lang][0]}
+                                alt=""
+                            />
+                        {:else}
                             <i class="ri-image-line"></i>
                         {/if}
-                        <h2>{product.title[selectedLang]}</h2>
+                        <h2>{product.title[t.lang]}</h2>
                         <button
                             onclick={() => toggleProductView(i)}
-                            aria-label="Edit product"
+                            aria-label={t.t("sunny_lazy_puffin_devour")}
                         >
                             <i class="ri-pencil-line"></i>
                         </button>
@@ -161,6 +164,21 @@
         </div>
     {:else}
         <div class="product" transition:fly={{ x: -100 }}>
+            <MultiSelect
+                options={supportedLangs}
+                bind:value={selectedLang}
+                multiple={false}
+                placeholder={t.t("weird_fuzzy_warbler_edit")}
+                label={t.t("weird_fuzzy_warbler_edit")}
+                bind:this={registry["lang_selector"]}
+            >
+                {#snippet valueRenderer(v)}
+                    {t.t(TranslatedLanguages[v])}
+                {/snippet}
+                {#snippet optionRenderer(v)}
+                    {t.t(TranslatedLanguages[v])}
+                {/snippet}
+            </MultiSelect>
             <Gallery
                 {selectedLang}
                 bind:images={products[selectedProduct].gallery}
@@ -192,6 +210,7 @@
         </div>
     {/if}
 </div>
+
 <!-- <button onclick={()=>console.log(products)}>log</button> -->
 
 <style lang="scss">
@@ -201,21 +220,27 @@
         display: flex;
         overflow: hidden;
         padding-top: 1rem;
+        --parent-bg:var(--neutral-2);
+        background-color: var(--parent-bg);
+        border-right: 1px solid var(--neutral-6);
+        border-top: 1px solid var(--neutral-6);
 
-        .colloection{
+        .colloection {
             display: flex;
             flex-direction: column;
             gap: 1rem;
             min-width: 100%;
+            padding: 1rem;
         }
 
         .product {
-            background-color: var(--neutral-1);
+            background-color: var(--parent-bg);
             display: flex;
             flex-direction: column;
             gap: 1rem;
             z-index: 1;
             min-width: 100%;
+            padding: 1rem;
         }
 
         .products {
@@ -232,8 +257,8 @@
                 padding: 0.5rem;
                 border-radius: 3px;
                 color: var(--neutral-12);
-                &>i,
-                &>img {
+                & > i,
+                & > img {
                     width: 80px;
                     height: 80px;
                     object-fit: cover;
@@ -251,7 +276,7 @@
                     display: -webkit-box;
                     -webkit-line-clamp: 3;
                     line-clamp: 2;
-                    -webkit-box-orient: vertical;  
+                    -webkit-box-orient: vertical;
                     overflow: hidden;
                 }
                 button {

@@ -12,6 +12,12 @@
     import Checkbox from "./Checkbox/InAttributes.svelte";
     import Select from "./Select/InAttributes.svelte";
     import Color from "./Color/InAttributes.svelte";
+    import Title from "./Title/InAttributes.svelte";
+    import Paragraph from "./Paragraph/InAttributes.svelte";
+    import ImageButtons from "./ImageButtons/InAttributes.svelte";
+
+
+
 
    
 
@@ -39,6 +45,9 @@
         [metas.checkbox.type]: Checkbox,
         [metas.select.type]: Select,
         [metas.color.type]:Color,
+        [metas.title.type]:Title,
+        [metas.paragraph.type]:Paragraph,
+        [metas.image_buttons.type]:ImageButtons,
     };
 
     const removeAttribute = (attribute: Attribute) => () => {

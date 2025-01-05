@@ -153,7 +153,7 @@
                 color 100ms ease-in-out,
                 transform 100ms ease-in-out,
                 top 100ms ease-in-out;
-            background-color: var(--neutral-1, var(--parent-bg));
+            background-color: var(--parent-bg, var(--neutral-1));
             padding: 0 0.2rem;
             left: 0.5rem;
             top: 1.25rem;

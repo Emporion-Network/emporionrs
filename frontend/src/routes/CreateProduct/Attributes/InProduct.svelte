@@ -5,6 +5,12 @@
     import Checkbox from "./Checkbox/InProduct.svelte";
     import Select from "./Select/InProduct.svelte";
     import Color from "./Color/InProduct.svelte";
+    import Title from "./Title/InProduct.svelte";
+    import Paragraph from "./Paragraph/InProduct.svelte";
+    import ImageButtons from "./ImageButtons/InProduct.svelte";
+
+
+
 
     import { getTutoRegistry } from "../tutoStore.svelte";
     let {
@@ -19,6 +25,9 @@
         [metas.checkbox.type]: Checkbox,
         [metas.select.type]: Select,
         [metas.color.type]: Color,
+        [metas.title.type]: Title,
+        [metas.paragraph.type]: Paragraph,
+        [metas.image_buttons.type]:ImageButtons,
     };
     let registry = getTutoRegistry();
 </script>

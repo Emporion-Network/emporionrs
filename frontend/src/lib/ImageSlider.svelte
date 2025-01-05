@@ -48,7 +48,8 @@
         flex: 1;
         display: flex;
         overflow: hidden;
-        position: relative;
+        position: sticky;
+        top: 2rem;
         border-radius: 4px;
         .buttons {
             right: 0%;

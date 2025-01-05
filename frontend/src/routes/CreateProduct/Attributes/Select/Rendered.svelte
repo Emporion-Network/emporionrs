@@ -50,19 +50,28 @@
     }
 </script>
 
-<MultiSelect options={[...options.keys()]} bind:value={get, set} multiple={false}>
-    {#snippet valueRenderer(i)}
-        {@const idx = options[i][0]}
-        {attributes[idx].value[selectedLang]}
-    {/snippet}
-    {#snippet optionRenderer(i)}
-        {@const idx = options[i][0]}
-        <span class:unavailable={!isAvailable(i)}>{attributes[idx].value[selectedLang]}</span>
-    {/snippet}
-</MultiSelect>
+<div class="wpr">
+    <MultiSelect options={[...options.keys()]} bind:value={get, set} multiple={false}>
+        {#snippet valueRenderer(i)}
+            {@const idx = options[i][0]}
+            {attributes[idx].value[selectedLang]}
+        {/snippet}
+        {#snippet optionRenderer(i)}
+            {@const idx = options[i][0]}
+            <span class:unavailable={!isAvailable(i)}>{attributes[idx].value[selectedLang]}</span>
+        {/snippet}
+    </MultiSelect>
+</div>
+
 
 <style lang="scss">
-    .unavailable{
-        opacity: 0.4;
+    .wpr{
+        :global(.multi-select){
+            margin: 1rem 0;
+        }
+        .unavailable{
+            opacity: 0.4;
+        }
     }
+   
 </style>

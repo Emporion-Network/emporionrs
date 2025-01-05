@@ -1,10 +1,17 @@
 <script lang="ts">
     import { metas, type Attribute } from "./_metas";
     import { type SupportedLanguage } from "../../../stores/translate.svelte";
+    
     import Buttons from "./Buttons/Rendered.svelte";
     import Checkbox from "./Checkbox/Rendered.svelte";
     import Select from "./Select/Rendered.svelte";
     import Color from "./Color/Rendered.svelte";
+    import Title from "./Title/Rendered.svelte";
+    import Paragraph from './Paragraph/Rendered.svelte';
+    import ImageButtons from './ImageButtons/Rendered.svelte';
+    
+
+
     import type { Product } from "../Form.svelte";
     import { intersect } from "../../../lib/utils";
 
@@ -13,6 +20,10 @@
         [metas.checkbox.type]: Checkbox,
         [metas.select.type]: Select,
         [metas.color.type]: Color,
+        [metas.title.type]:Title,
+        [metas.paragraph.type]:Paragraph,
+        [metas.image_buttons.type]:ImageButtons,
+
     };
 
     let {

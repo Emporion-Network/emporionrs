@@ -2,7 +2,7 @@
     import type { SvelteComponent } from "svelte";
     import MultiSelect from "../../../lib/MultiSelect.svelte";
     import { getTranslator } from "../../../stores/translate.svelte";
-    import { metas, type Attribute } from "./_metas";
+    import { attributeTypeValues, metas, type Attribute } from "./_metas";
     let t = getTranslator();
     let {
         attributeType = $bindable(),
@@ -44,7 +44,7 @@
 </script>
 <div class="attribute-selector" bind:this={el}>
     <MultiSelect
-        options={["buttons", "checkbox", "select", "color"] as const}
+        options={attributeTypeValues}
         label={t.t("level_arable_robin_talk")}
         placeholder={t.t("level_arable_robin_talk")}
         bind:value={attributeType}

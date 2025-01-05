@@ -1,7 +1,6 @@
 <script lang="ts">
     import ImageSlider from "../../lib/ImageSlider.svelte";
     import type { SupportedLanguage } from "../../stores/translate.svelte";
-    import type { Attribute } from "./Attributes/_metas";
     import Rendered from "./Attributes/Rendered.svelte";
     import type { Product } from "./Form.svelte";
 
@@ -40,8 +39,18 @@
         top: 1rem;
         align-self: flex-start;
         gap: 1rem;
+        padding-right: 1rem;
         .picker {
             width: 40%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            h1{
+                text-align: center;
+            }
+            p{
+                text-align: center;
+            }
         }
     }
 </style>
