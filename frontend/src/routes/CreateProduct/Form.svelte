@@ -28,20 +28,24 @@
     import { untrack } from "svelte";
     import { fly } from "svelte/transition";
     import { getTutoRegistry } from "./tutoStore.svelte";
+    import Collapsable from "../../lib/Collapsable.svelte";
+    import Categories from "./Categories.svelte";
+    import ContextMenu from "../../lib/ContextMenu.svelte";
 
     let t = getTranslator();
     let registry = getTutoRegistry();
     let {
+        selectedProduct = $bindable(),
         products = $bindable(),
         selectedLang = $bindable(),
     }: {
         products: Product[];
         selectedLang: SupportedLanguage;
+        selectedProduct: number;
     } = $props();
 
     let attributes: Attribute[] = $state([]);
     let collectionName = $state("");
-    let selectedProduct = $state(-1);
     let showProduct = $state(false);
 
     const addProduct = () => {
@@ -74,7 +78,6 @@
     const onpush = () => {
         const a = attributes[attributes.length - 1];
         const bindClone = metas[a.display_type].bindClone;
-        console.log("hhehhe");
         products.forEach((p) => {
             p.attributes.push(bindClone(a as any));
         });
@@ -94,73 +97,121 @@
             showProduct = true;
         } else {
             showProduct = false;
-            productId = -1;
         }
+    };
+
+    const cloneProduct = (productId: number) => {
+        products.push($state.snapshot(products[productId]));
+    };
+
+    const selectProduct = (productId: number) => {
+        selectedProduct = productId;
     };
 </script>
 
 <div class="form">
     {#if !showProduct}
-        <div class="colloection">
-            <MultiSelect
-                options={supportedLangs}
-                bind:value={selectedLang}
-                multiple={false}
-                placeholder={t.t("weird_fuzzy_warbler_edit")}
-                label={t.t("weird_fuzzy_warbler_edit")}
-                bind:this={registry["lang_selector"]}
-            >
-                {#snippet valueRenderer(v)}
-                    {t.t(TranslatedLanguages[v])}
-                {/snippet}
-                {#snippet optionRenderer(v)}
-                    {t.t(TranslatedLanguages[v])}
-                {/snippet}
-            </MultiSelect>
-
-            <Input
-                type="text"
-                label={t.t("mealy_spare_thrush_gleam")}
-                placeholder={t.t("mealy_spare_thrush_gleam")}
-                bind:value={collectionName}
-                bind:this={registry["collection_name"]}
-            />
-
-            <AttributesInCollection
-                {onremove}
-                {onswap}
-                {onpush}
-                {selectedLang}
-                bind:attributes
-            />
-            <div class="products" bind:this={registry["products"]}>
-                {#each products as product, i}
-                    <div class="preview">
-                        {#if product.gallery[t.lang][0]}
-                            <img
-                                src={product.gallery[t.lang][0]}
-                                alt=""
-                            />
-                        {:else}
-                            <i class="ri-image-line"></i>
-                        {/if}
-                        <h2>{product.title[t.lang]}</h2>
-                        <button
-                            onclick={() => toggleProductView(i)}
-                            aria-label={t.t("sunny_lazy_puffin_devour")}
-                        >
-                            <i class="ri-pencil-line"></i>
-                        </button>
-                    </div>
-                {/each}
-                <button
-                    onclick={addProduct}
-                    bind:this={registry["add_product"]}
+        <div class="collection">
+            <div class="wpr">
+                <MultiSelect
+                    options={supportedLangs}
+                    bind:value={selectedLang}
+                    multiple={false}
+                    placeholder={t.t("weird_fuzzy_warbler_edit")}
+                    label={t.t("weird_fuzzy_warbler_edit")}
+                    bind:this={registry["lang_selector"]}
                 >
-                    <i class="ri-add-line"></i>
-                    Add product
-                </button>
+                    {#snippet valueRenderer(v)}
+                        {t.t(TranslatedLanguages[v])}
+                    {/snippet}
+                    {#snippet optionRenderer(v)}
+                        {t.t(TranslatedLanguages[v])}
+                    {/snippet}
+                </MultiSelect>
             </div>
+            <Collapsable opened>
+                {#snippet head()}
+                    <h3>General</h3>
+                {/snippet}
+                <div class="wpr">
+                    <Input
+                        type="text"
+                        label={t.t("mealy_spare_thrush_gleam")}
+                        placeholder={t.t("mealy_spare_thrush_gleam")}
+                        bind:value={collectionName}
+                        bind:this={registry["collection_name"]}
+                    />
+                    <Categories value="category_all"></Categories>
+                </div>
+            </Collapsable>
+            <Collapsable opened>
+                {#snippet head()}
+                    <h3>Attributes</h3>
+                {/snippet}
+
+                <AttributesInCollection
+                    {onremove}
+                    {onswap}
+                    {onpush}
+                    {selectedLang}
+                    bind:attributes
+                />
+            </Collapsable>
+            <Collapsable opened>
+                {#snippet head()}
+                    <h3>Products</h3>
+                {/snippet}
+                <div class="products" bind:this={registry["products"]}>
+                    {#each products as product, i}
+                        <div class="preview">
+                            {#if product.gallery[t.lang][0]}
+                                <img src={product.gallery[t.lang][0]} alt="" />
+                            {:else}
+                                <i class="ri-image-line"></i>
+                            {/if}
+                            <h2>{product.title[t.lang]}</h2>
+                            <ContextMenu>
+                                {#snippet opener(props)}
+                                    <button
+                                        aria-label="More"
+                                        bind:this={props.ref}
+                                        {...props}
+                                    >
+                                        <i class="ri-more-line"></i>
+                                    </button>
+                                {/snippet}
+                                {#snippet options(close)}
+                                    <button
+                                        onclick={() => toggleProductView(i)}
+                                    >
+                                        <i class="ri-pencil-line"></i>
+                                        {t.t("sunny_lazy_puffin_devour")}
+                                    </button>
+                                    <button
+                                        onclick={() => close() && cloneProduct(i)}>
+                                        <i class="ri-file-copy-line"></i>
+                                        Clone Product
+                                    </button>
+                                    <button
+                                        onclick={() => close() && selectProduct(i)}>
+                                        <i class="ri-file-copy-line"></i>
+                                        Select Product
+                                    </button>
+                                    <!-- TODO: disable product -->
+                                {/snippet}
+                            </ContextMenu>
+                        </div>
+                    {/each}
+                    <button
+                        onclick={addProduct}
+                        class="button-main"
+                        bind:this={registry["add_product"]}
+                    >
+                        <i class="ri-add-line"></i>
+                        {t.t("spry_cool_goose_sprout")}
+                    </button>
+                </div>
+            </Collapsable>
         </div>
     {:else}
         <div class="product" transition:fly={{ x: -100 }}>
@@ -179,6 +230,7 @@
                     {t.t(TranslatedLanguages[v])}
                 {/snippet}
             </MultiSelect>
+
             <Gallery
                 {selectedLang}
                 bind:images={products[selectedProduct].gallery}
@@ -204,14 +256,15 @@
                 {selectedLang}
             />
             <button
+                class="button-main"
                 onclick={() => toggleProductView()}
-                bind:this={registry["close_product"]}>close</button
+                bind:this={registry["close_product"]}
             >
+                {t.t("actual_cool_racoon_laugh")}
+            </button>
         </div>
     {/if}
 </div>
-
-<!-- <button onclick={()=>console.log(products)}>log</button> -->
 
 <style lang="scss">
     .form {
@@ -219,18 +272,21 @@
         position: relative;
         display: flex;
         overflow: hidden;
-        padding-top: 1rem;
-        --parent-bg:var(--neutral-2);
+        --parent-bg: var(--neutral-1);
         background-color: var(--parent-bg);
         border-right: 1px solid var(--neutral-6);
-        border-top: 1px solid var(--neutral-6);
 
-        .colloection {
+        .wpr {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
-            min-width: 100%;
             padding: 1rem;
+            gap: 1rem;
+        }
+
+        .collection {
+            display: flex;
+            flex-direction: column;
+            min-width: 100%;
         }
 
         .product {
@@ -247,6 +303,7 @@
             display: flex;
             flex-direction: column;
             gap: 1rem;
+            padding: 1rem;
 
             .preview {
                 display: flex;
@@ -284,26 +341,13 @@
                     border: none;
                     color: var(--neutral-11);
                     outline: none;
+                    display: flex;
+                    gap: 0.5rem;
+                    padding: 0.5rem;
                     &:hover {
                         cursor: pointer;
                         color: var(--neutral-12);
                     }
-                }
-            }
-
-            & > button {
-                outline: none;
-                background-color: var(--main-a1);
-                border: 1px solid var(--main-6);
-                color: var(--main-11);
-                border-radius: 3px;
-                outline: none;
-                height: var(--height-2);
-                &:hover {
-                    cursor: pointer;
-                    background-color: var(--main-a3);
-                    border: 1px solid var(--main-8);
-                    color: var(--main-12);
                 }
             }
         }

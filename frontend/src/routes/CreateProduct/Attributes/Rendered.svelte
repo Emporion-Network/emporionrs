@@ -60,9 +60,9 @@
             })[0];
             selectedProductId = val;
         } else {
-            selectedProductId = tgt[0]; 
-            // should always have only 1 
+            // should always have only 1
             // otherways its the same product and picking any of them is fine
+            selectedProductId = tgt[0]; 
         }
     }
 </script>

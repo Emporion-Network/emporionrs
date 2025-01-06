@@ -69,6 +69,7 @@
         gap:1rem;
         flex-wrap: wrap;
         align-items: flex-start;
+        justify-content: center;
         padding:1rem 0;
         button{
             background-color: transparent;

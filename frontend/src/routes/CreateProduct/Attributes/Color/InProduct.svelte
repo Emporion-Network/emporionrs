@@ -42,6 +42,7 @@
     .input-attribute{
         display: flex;
         flex-direction: row;
+        gap: 1rem;
         :global(.translatable-input){
             flex:1;
         }

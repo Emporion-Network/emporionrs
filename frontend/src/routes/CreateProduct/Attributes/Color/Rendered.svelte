@@ -72,6 +72,7 @@
 <style lang="scss">
     .wpr {
         display: flex;
+        justify-content: center;
         gap: 1rem;
         margin: 1rem 0;
         button {

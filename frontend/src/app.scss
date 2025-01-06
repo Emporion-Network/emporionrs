@@ -1,4 +1,4 @@
-@mixin import_color($color){
+@mixin import_color($color) {
   @import url("@radix-ui/colors/#{$color}.css");
   @import url("@radix-ui/colors/#{$color}-dark.css");
   @import url("@radix-ui/colors/#{$color}-alpha.css");
@@ -7,6 +7,7 @@
 
 @mixin map_color($color, $new_name) {
   @include import_color($color);
+
   :root {
     @for $i from 1 through 12 {
       --#{$new_name}-#{$i}:var(--#{$color}-#{$i});
@@ -99,8 +100,9 @@ h1 {
   font-family: var(--font-1);
 }
 
-.hide-scrollbar{
+.hide-scrollbar {
   scrollbar-width: none;
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -122,7 +124,7 @@ h1 {
   }
 }
 
-.skeleton-button{
+.skeleton-button {
   background-color: var(--main-a3);
   border: 1px solid var(--main-7);
   color: var(--main-11);
@@ -130,13 +132,32 @@ h1 {
   font-family: var(--font-1);
   font-size: 1.3rem;
   border-radius: 3px;
-  i{
-      display: inline-block;
-      animation: rotate 1s linear infinite;
+
+  i {
+    display: inline-block;
+    animation: rotate 1s linear infinite;
   }
+
   @keyframes rotate {
-      to{
-          transform: rotate(360deg);
-      }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+.button-main {
+  outline: none;
+  background-color: var(--main-a1);
+  border: 1px solid var(--main-6);
+  color: var(--main-11);
+  border-radius: 3px;
+  outline: none;
+  height: var(--height-2);
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--main-a3);
+    border: 1px solid var(--main-8);
+    color: var(--main-12);
   }
 }

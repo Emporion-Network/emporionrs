@@ -78,6 +78,8 @@
         display: flex;
         gap: 1rem;
         margin: 1rem 0;
+        justify-content: center;
+        flex-wrap: wrap;
         button {
             outline: none;
             border: none;

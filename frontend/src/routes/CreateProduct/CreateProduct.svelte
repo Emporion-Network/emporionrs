@@ -13,25 +13,27 @@
     let t = getTranslator();
 
     let didTutorial = storage<boolean>("product-tutorial");
+    let selectedLang = $state(t.lang);
+    let selectedProduct = $state(0);
+    let products: Product[] = $state([]/*DEV as any*/);
 
     const ondone = () => {
         didTutorial.set(true);
     };
 
-    let selectedLang = $state(t.lang);
     onMount(() => {
         setTimeout(() => {
             selectedLang = t.lang;
         }, 10);
     });
 
-    let products: Product[] = $state(DEV as any);
+    
 </script>
 
 <Route path="/create-product">
     <div class="create-product">
-        <Form bind:products bind:selectedLang></Form>
-        <Preview {products} {selectedLang}></Preview>
+        <Form bind:products bind:selectedLang bind:selectedProduct></Form>
+        <Preview {products} {selectedLang} bind:selectedProduct></Preview>
         {#if !didTutorial.get()}
             <Tuto {ondone} bind:products></Tuto>
         {/if}

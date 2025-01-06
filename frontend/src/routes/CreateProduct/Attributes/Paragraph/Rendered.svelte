@@ -1,9 +1,11 @@
 <script lang="ts">
+    import { untrack } from "svelte";
     import type { SupportedLanguage } from "../../../../stores/translate.svelte";
     import type { Attribute } from "./_meta";
     let {
         attributes,
         selectedLang,
+        value,
         pref = $bindable(),
     }: {
         attributes: Attribute[];
@@ -14,6 +16,14 @@
         onupdate:(v:number[])=>void;
     } = $props();
 
+    /// 
+    $effect(()=>{
+        value;
+        untrack(()=>{
+            pref = attributes.map((_, i) => i)
+        })
+    })
+
 </script>
 
 <p>{attributes[0]?.value?.[selectedLang]}</p>
@@ -23,5 +33,6 @@
         text-align: center;
         white-space: pre-wrap;
         color: var(--neutral-11);
+        line-height: 1.1em;
     }
 </style>

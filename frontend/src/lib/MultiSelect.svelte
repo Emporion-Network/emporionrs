@@ -33,7 +33,8 @@
         return multiple === true;
     };
 
-    let el:HTMLElement = $state()!;
+    let el: HTMLElement = $state()!;
+    let pos = $state(new DOMRect());
 
     const slectOption = (o: T) => () => {
         if (!isMultiple(value)) {
@@ -45,23 +46,26 @@
                 value.add(o);
             }
         }
-        setTimeout(()=>{
-            //@ts-ignore
-            document.activeElement.blur();
-        }, 100)
+        //@ts-ignore
+        document.activeElement.blur();
+    };
+
+    const setPos = () => {
+        pos = el.getBoundingClientRect();
     };
 
     export const actions = {
-        setValue:(v:T) => slectOption(v)(),
-        open:()=> el.focus(),
+        setValue: (v: T) => slectOption(v)(),
+        open: () => el.focus(),
     };
-    export {
-        el as element
-    };
+    export { el as element };
 </script>
+
+<svelte:window onscroll={setPos} onresize={setPos} />
 
 <div
     bind:this={el}
+    onfocus={setPos}
     class="multi-select"
     class:hasValue={(isMultiple(value) && value.size > 0) ||
         (!isMultiple(value) && value)}
@@ -79,7 +83,10 @@
 
     <div class="label">{label}</div>
 
-    <div class="options">
+    <div
+        class="options"
+        style="--l{pos.left}px; --t:{pos.top + pos.height}px; --w:{pos.width}px"
+    >
         {#if filterRenderer}
             <div class="filter">
                 {@render filterRenderer?.()}
@@ -87,7 +94,7 @@
         {/if}
         {#each options as option (option)}
             {#if !filter || filter(option)}
-                <button onclick={slectOption(option)} >
+                <button onclick={slectOption(option)}>
                     {@render optionRenderer(
                         option,
                         isMultiple(value) ? value.has(option) : value == option,
@@ -106,7 +113,7 @@
         flex-direction: column;
         position: relative;
         outline: none;
-        background-color: var(--bg-color, transparent);
+        background-color: var(--parent-bg, transparent);
 
         &:hover {
             .label {
@@ -188,20 +195,22 @@
             }
         }
         .options {
-            position: absolute;
-            width: 100%;
+            position: fixed;
             max-height: 300px;
-            top: calc(100% + 0.5rem);
+            top: calc(var(--t) + 0.5rem);
+            left: var(--l);
+            width: var(--w);
+
             overflow-y: auto;
             display: none;
             flex-direction: column;
             border: 1px solid var(--neutral-6);
-            background-color: var(--bg-color, var(--neutral-1));
+            background-color: var(--parent-bg, var(--neutral-1));
 
-            .filter{
+            .filter {
                 position: sticky;
                 top: 0;
-                background-color: var(--bg-color, var(--neutral-1));
+                background-color: var(--parent-bg, var(--neutral-1));
                 width: 100%;
             }
 

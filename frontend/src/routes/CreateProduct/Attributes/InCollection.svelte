@@ -16,11 +16,6 @@
     import Paragraph from "./Paragraph/InAttributes.svelte";
     import ImageButtons from "./ImageButtons/InAttributes.svelte";
 
-
-
-
-   
-
     let {
         attributes = $bindable(),
         selectedLang,
@@ -30,9 +25,9 @@
     }: {
         selectedLang: SupportedLanguage;
         attributes: Attribute[];
-        onswap?:(i:number, j:number)=>void;
-        onremove?:(i:number)=>void;
-        onpush?:() => void;
+        onswap?: (i: number, j: number) => void;
+        onremove?: (i: number) => void;
+        onpush?: () => void;
     } = $props();
 
     let t = getTranslator();
@@ -44,10 +39,10 @@
         [metas.buttons.type]: Buttons,
         [metas.checkbox.type]: Checkbox,
         [metas.select.type]: Select,
-        [metas.color.type]:Color,
-        [metas.title.type]:Title,
-        [metas.paragraph.type]:Paragraph,
-        [metas.image_buttons.type]:ImageButtons,
+        [metas.color.type]: Color,
+        [metas.title.type]: Title,
+        [metas.paragraph.type]: Paragraph,
+        [metas.image_buttons.type]: ImageButtons,
     };
 
     const removeAttribute = (attribute: Attribute) => () => {
@@ -66,61 +61,76 @@
     };
 </script>
 
-<AttributeSelector {onpush} bind:attributes bind:attributeType bind:this={registry["attribute_selector"]}/>
+<div class="wpr">
+    <AttributeSelector
+        {onpush}
+        bind:attributes
+        bind:attributeType
+        bind:this={registry["attribute_selector"]}
+    />
 
-<div class="attributes">
-    {#each attributes as attr, i (attr)}
-        {@const Component = map[attr.display_type] as any}
-        <Draggable 
-        onswap={swap(attr)}
-        bind:this={registry[`attribute_${i}`]}
-        >
-            {#snippet content()}
-                <h2>{t.t(metas[attr.display_type].label as any)}</h2>
-                <Component bind:attribute={attributes[i]} lang={selectedLang}
-                    bind:this={registry[`attribute_${i}_elem`]}
-                ></Component>
-            {/snippet}
-            {#snippet menu()}
-                <button onclick={removeAttribute(attr)} class="remove" aria-label={t.t("large_crisp_dove_spur")}>
-                    <i class="ri-delete-bin-line"></i>
-                </button>
-            {/snippet}
-        </Draggable>
-    {/each}
+    <div class="attributes">
+        {#each attributes as attr, i (attr)}
+            {@const Component = map[attr.display_type] as any}
+            <Draggable
+                onswap={swap(attr)}
+                bind:this={registry[`attribute_${i}`]}
+            >
+                {#snippet content()}
+                    <h2>{t.t(metas[attr.display_type].label as any)}</h2>
+                    <Component
+                        bind:attribute={attributes[i]}
+                        lang={selectedLang}
+                        bind:this={registry[`attribute_${i}_elem`]}
+                    ></Component>
+                {/snippet}
+                {#snippet menu()}
+                    <button
+                        onclick={removeAttribute(attr)}
+                        class="remove"
+                        aria-label={t.t("large_crisp_dove_spur")}
+                    >
+                        <i class="ri-delete-bin-line"></i>
+                    </button>
+                {/snippet}
+            </Draggable>
+        {/each}
+    </div>
 </div>
 
-
-
 <style lang="scss">
-    .attributes {
+    .wpr {
         display: flex;
+        gap:1rem;
         flex-direction: column;
-        padding: 1rem 0;
-        .remove{
-            background-color: transparent;
-            border: none;
-            outline: none;
-            background-color: var(--red-a1);
-            height: 100%;
-            padding:0 1rem;
-            color: var(--red-11);
-            &:hover{
-                cursor: pointer;
-                background-color: var(--red-a2);
-                color: var(--red-10);
+        padding: 1rem;
+        .attributes {
+            display: flex;
+            flex-direction: column;
+            .remove {
+                background-color: transparent;
+                border: none;
+                outline: none;
+                background-color: var(--red-a1);
+                height: 100%;
+                padding: 0 1rem;
+                color: var(--red-11);
+                &:hover {
+                    cursor: pointer;
+                    background-color: var(--red-a2);
+                    color: var(--red-10);
+                }
+            }
+            h2 {
+                font-family: var(--font-2);
+                margin-bottom: 1rem;
+                text-transform: capitalize;
             }
         }
-        h2{
-            font-family: var(--font-2);
-            margin-bottom: 1rem;
-            text-transform: capitalize;
+        :global(.input-attribute) {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
         }
-    }
-    
-    :global(.input-attribute){
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
     }
 </style>

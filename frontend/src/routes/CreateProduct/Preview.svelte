@@ -7,25 +7,26 @@
     let {
         selectedLang,
         products,
+        selectedProduct=$bindable()
     }: {
         products: Product[];
         selectedLang: SupportedLanguage;
+        selectedProduct:number;
     } = $props();
 
-    let selectedProductId = $state(0);
-    let selectedProduct = $derived(products[selectedProductId]);
+    let product = $derived(products[selectedProduct]);
 </script>
 
 <div class="preview">
-    {#if selectedProduct}
+    {#if product}
         <ImageSlider
-            images={selectedProduct.gallery[selectedLang]}
-            alt={selectedProduct.title[selectedLang]}
+            images={product.gallery[selectedLang]}
+            alt={product.title[selectedLang]}
         />
         <div class="picker">
-            <h1>{selectedProduct.title[selectedLang]}</h1>
-            <p>{selectedProduct.description[selectedLang]}</p>
-            <Rendered {selectedLang} {products} bind:selectedProductId></Rendered>
+            <h1>{product.title[selectedLang]}</h1>
+            <p>{product.description[selectedLang]}</p>
+            <Rendered {selectedLang} {products} bind:selectedProductId={selectedProduct}></Rendered>
         </div>
     {/if}
 </div>
@@ -47,9 +48,11 @@
             gap: 0.5rem;
             h1{
                 text-align: center;
+                line-height: 1.1em;
             }
             p{
                 text-align: center;
+                line-height: 1.1em;
             }
         }
     }
